@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>个人觉得不错的121部番 (2008–2026)</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: #0b0f19;
+      color: #f1f5f9;
+      overflow-x: hidden;
+    }
+    img {
+      pointer-events: none;
+      -webkit-user-drag: none;
+      user-drag: none;
+      -webkit-touch-callout: none;
+      user-select: none;
+    }
+    .poster-card {
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease;
+    }
+    .poster-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 28px -8px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(99, 102, 241, 0.45);
+    }
+    .poster-img {
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .poster-card:hover .poster-img {
+      transform: scale(1.04);
+    }
+    /* Hide scrollbar for capsule rows while keeping smooth horizontal touch scrolling */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* Custom page scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #27324a;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3b4c6e;
+    }
+    /* Modal CSS smooth fade-in transition */
+    .modal-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-panel {
+      transform: translateY(12px) scale(0.97);
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .modal-backdrop.active .modal-panel {
+      transform: translateY(0) scale(1);
+    }
+    /* Douyin 9:16 Card & Auto-Scroll Modes (Admin only) */
+    .douyin-frame-wrapper {
+      width: 432px;
+      max-width: 100%;
+      aspect-ratio: 9 / 16;
+      margin: 0 auto;
+      background: linear-gradient(165deg, #0f172a 0%, #090d16 55%, #131129 100%);
+      border: 2px solid rgba(99, 102, 241, 0.45);
+      border-radius: 20px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px 14px 14px 14px;
+      position: relative;
+    }
+    body.douyin-scroll-recording .control-panel,
+    body.douyin-scroll-recording header,
+    body.douyin-scroll-recording footer,
+    body.douyin-scroll-recording #douyinStudioPanel {
+      display: none !important;
+    }
+    body.douyin-scroll-recording main {
+      max-width: 440px !important;
+      margin: 0 auto !important;
+      padding: 12px 10px 80px 10px !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Stop Auto-Scroll Bar (Admin Recording Mode) -->
+  <div id="stopScrollBar" class="hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-50 items-center gap-2 px-4 py-2 rounded-full bg-slate-900/95 backdrop-blur-md border border-rose-500/50 shadow-2xl">
+    <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+    <span class="text-xs font-semibold text-slate-200">抖音竖屏自动滚动录屏中...</span>
+    <button id="pauseResumeScrollBtn" class="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-xs text-white font-medium">暂停</button>
+    <button id="stopScrollBtn" class="px-2.5 py-1 rounded-full bg-rose-600 hover:bg-rose-500 text-xs text-white font-semibold">退出录屏</button>
+  </div>
+
+  <!-- Lightweight Toast Notification -->
+  <div id="lightToast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[60] pointer-events-none opacity-0 -translate-y-2 transition-all duration-300 flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/95 backdrop-blur-md border border-emerald-500/50 text-emerald-300 text-xs sm:text-sm font-semibold shadow-2xl">
+    <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+    </svg>
+    <span id="lightToastText">原图开始下载</span>
+  </div>
+
+  <!-- Top Header: Big Title & Intro Paragraph -->
+  <header class="relative border-b border-slate-800/80 bg-gradient-to-b from-slate-900/95 via-slate-900/75 to-[#0b0f19]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 pt-6 pb-5">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-semibold mb-2.5">
+            <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+            个人严选 · 画风舒适 · 一集不落完整看完
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-3 flex-wrap">
+            <span>个人觉得不错的121部番</span>
+            <span class="text-xs sm:text-sm font-semibold px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700">2008 – 2026</span>
+          </h1>
+          <p class="mt-2 text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
+            收录 121 部完整追完、画风顺眼且值得留存的精选番剧。点击任意番剧卡片可弹出详情页阅读剧情简介并直达 Bangumi 番组计划主页。
+          </p>
+        </div>
+
+        <!-- Hidden Admin Action Mount Point (Rendered ONLY when URL has ?admin=true) -->
+        <div id="adminActionMount" class="hidden flex-wrap items-center gap-2 shrink-0"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Control Bar: Search, Sort Dropdown, and Two Horizontally Scrollable Capsule Rows -->
+  <section class="control-panel sticky top-0 z-30 bg-[#0b0f19]/95 backdrop-blur-xl border-b border-slate-800/80">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 space-y-2.5">
+      <!-- Row 1: Fuzzy Title Search Box + Year Sort Dropdown -->
+      <div class="flex items-center justify-between gap-2.5">
+        <div class="relative flex-1">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="搜索番名 (支持模糊匹配，如：我推 / 命运石 / 巨人)..."
+            class="w-full pl-9 pr-8 py-2 rounded-xl bg-slate-900 border border-slate-700/80 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+          />
+          <button id="clearSearchBtn" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200" title="清空搜索">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Sort Dropdown -->
+        <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 shrink-0">
+          <span class="text-xs text-slate-400 font-medium">排序:</span>
+          <select id="sortSelect" aria-label="排序方式" class="bg-transparent text-xs sm:text-sm font-medium text-slate-200 focus:outline-none cursor-pointer">
+            <option value="default" class="bg-slate-900">默认推荐顺序</option>
+            <option value="year-desc" class="bg-slate-900">按年份倒序 (2026→2008)</option>
+            <option value="year-asc" class="bg-slate-900">按年份正序 (2008→2026)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Capsule Row 1 (Years): Horizontally Scrollable -->
+      <div class="flex items-center gap-1.5 overflow-x-auto whitespace-nowrap no-scrollbar pt-1" id="yearCapsuleRow">
+        <span class="text-[11px] font-semibold text-slate-500 mr-1 shrink-0">年份:</span>
+        <button data-year-range="all" class="year-pill px-3 py-1 rounded-full text-xs font-medium bg-indigo-600 text-white shadow-sm shrink-0 transition-all">全部</button>
+        <button data-year-range="2008-2015" class="year-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">2008-2015</button>
+        <button data-year-range="2016-2020" class="year-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">2016-2020</button>
+        <button data-year-range="2021-2023" class="year-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">2021-2023</button>
+        <button data-year-range="2024-2026" class="year-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">2024-2026</button>
+      </div>
+
+      <!-- Capsule Row 2 (Genres): Horizontally Scrollable -->
+      <div class="flex items-center gap-1.5 overflow-x-auto whitespace-nowrap no-scrollbar pb-0.5" id="genreCapsuleRow">
+        <span class="text-[11px] font-semibold text-slate-500 mr-1 shrink-0">题材:</span>
+        <button data-genre="all" class="genre-pill px-3 py-1 rounded-full text-xs font-medium bg-indigo-600 text-white shadow-sm shrink-0 transition-all">全部</button>
+        <button data-genre="恋爱" class="genre-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">恋爱</button>
+        <button data-genre="热血" class="genre-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">热血</button>
+        <button data-genre="异世界" class="genre-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">异世界</button>
+        <button data-genre="奇幻" class="genre-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">奇幻</button>
+        <button data-genre="青春" class="genre-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">青春</button>
+        <button data-genre="搞笑" class="genre-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">搞笑</button>
+        <button data-genre="日常" class="genre-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">日常</button>
+        <button data-genre="悬疑" class="genre-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">悬疑</button>
+        <button data-genre="智斗" class="genre-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">智斗</button>
+        <button data-genre="科幻" class="genre-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all">科幻</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="max-w-5xl mx-auto px-3 sm:px-6 py-5">
+    <!-- Admin Studio Mount Point (Completely unrendered unless ?admin=true) -->
+    <div id="adminStudioMount"></div>
+
+    <!-- Active Filter Summary Bar -->
+    <div id="filterSummaryBar" class="hidden items-center justify-between mb-4 px-3.5 py-2 rounded-xl bg-indigo-950/40 border border-indigo-500/30 text-xs text-indigo-200">
+      <span id="filterSummaryText">当前筛选结果</span>
+      <button id="resetAllFiltersBtn" class="text-indigo-400 hover:text-indigo-300 font-semibold underline">重置筛选</button>
+    </div>
+
+    <!-- 3-Column Poster Grid Container -->
+    <div id="galleryContainer"></div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden py-20 text-center">
+      <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-slate-400">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </div>
+      <h3 class="text-sm sm:text-base font-bold text-slate-200">没有找到匹配的番剧</h3>
+      <p class="text-xs text-slate-400 mt-1">请尝试更换番名关键词或切换年份、题材胶囊标签</p>
+      <button id="emptyResetBtn" class="mt-4 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all">显示全部 121 部</button>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 py-6 mt-8 text-center text-xs text-slate-500">
+    <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>个人精选 121 部动漫片单 (2008–2026) · 每一部都是完整看完的诚意之作</p>
+      <p>点击任意卡片可查看剧情简介或前往 Bangumi 番组计划了解详情</p>
+    </div>
+  </footer>
+
+  <!-- Second-Level Detail Modal (CSS Smooth Fade-In) -->
+  <div id="detailModal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" aria-hidden="true">
+    <div class="modal-panel relative w-full max-w-2xl rounded-2xl bg-slate-900 border border-slate-700/90 shadow-2xl overflow-hidden">
+      <!-- Close Button -->
+      <button id="closeModalBtn" aria-label="关闭详情" class="absolute top-3.5 right-3.5 z-20 w-8 h-8 rounded-full bg-slate-800/90 hover:bg-slate-700 text-slate-300 flex items-center justify-center border border-slate-600/60 transition-all">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <div class="grid grid-cols-1 sm:grid-cols-12">
+        <!-- Poster Preview Column -->
+        <div class="sm:col-span-5 bg-slate-950 flex items-center justify-center p-5 relative">
+          <div class="w-44 sm:w-full aspect-[3/4] rounded-xl overflow-hidden shadow-xl border border-slate-800 relative bg-slate-900">
+            <img
+              id="modalPosterImg"
+              src=""
+              alt=""
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              draggable="false"
+              class="w-full h-full object-cover pointer-events-none"
+              onerror="window.handleImageError(this)"
+            />
+            <div id="modalPosterFallback" class="hidden absolute inset-0 bg-slate-900 flex-col items-center justify-center p-4 text-center">
+              <span id="modalFallbackTitle" class="text-sm font-bold text-slate-200 leading-snug"></span>
+              <span id="modalFallbackYear" class="text-xs font-semibold text-amber-400 mt-1.5"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info, ~100-Word Plot Synopsis & Bangumi Jump Button Column -->
+        <div class="sm:col-span-7 p-5 sm:p-6 flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex flex-wrap items-center gap-1.5 mb-2.5">
+              <span id="modalYearBadge" class="px-2.5 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs font-semibold">2023年</span>
+              <div id="modalTagGroup" class="flex flex-wrap items-center gap-1"></div>
+            </div>
+
+            <h3 id="modalCnTitle" class="text-lg sm:text-xl font-bold text-white leading-snug">《我推的孩子》</h3>
+            <p id="modalJpTitle" class="text-xs sm:text-sm text-slate-400 mt-1 font-medium">【推しの子】</p>
+
+            <!-- ~100-Word Objective Plot Synopsis -->
+            <div class="mt-4 pt-3.5 border-t border-slate-800/90">
+              <h4 class="text-xs font-semibold text-indigo-300 mb-1.5">剧情简介</h4>
+              <p id="modalSynopsis" class="text-xs sm:text-sm text-slate-300 leading-relaxed text-justify"></p>
+            </div>
+          </div>
+
+          <!-- Bottom Action Bar: Jump to Bangumi & Prev/Next -->
+          <div class="pt-3.5 border-t border-slate-800/90 space-y-3">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-2.5">
+              <a
+                id="modalBgmLink"
+                href="https://bangumi.tv"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="w-full flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-semibold shadow-lg shadow-indigo-600/25 transition-all"
+              >
+                <span>前往 Bangumi 番组计划查看详情</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              <button
+                id="downloadOriginalPosterBtn"
+                type="button"
+                class="hidden w-full sm:w-auto shrink-0 items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs sm:text-sm font-bold shadow-lg shadow-amber-500/10 transition-all"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                <span>下载原画海报</span>
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between pt-1">
+              <button id="prevAnimeBtn" class="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-white transition-all py-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                上一部
+              </button>
+              <button id="nextAnimeBtn" class="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-white transition-all py-1">
+                下一部
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Complete 121 Anime Dataset with official posters, genre tags, and ~100-word objective synopses
+    const ANIME_LIST = [{"id": 1, "title": "我推的孩子", "displayTitle": "《我推的孩子》", "year": 2023, "yearStr": "2023年", "jp": "【推しの子】", "romaji": "Oshi no Ko", "bgmId": "386809", "bgmCover": "https://lain.bgm.tv/pic/cover/l/73/02/637659_13S2z.jpg", "tags": ["悬疑", "青春", "智斗"], "synopsis": "在地方都市担任妇产科医生的雨宫吾郎，某天迎来了自己所推崇的偶像星野爱。然而在爱分娩前夕，吾郎却遭人杀害，并在保有前世记忆的情况下，转生为星野爱的双胞胎儿子阿奎亚。围绕母亲遇害的真相，他踏入了光鲜却残酷的演艺圈世界。", "backupCover": "https://api.bgm.tv/v0/subjects/386809/image?type=large"}, {"id": 2, "title": "我们的重制人生", "displayTitle": "《我们的重制人生》", "year": 2021, "yearStr": "2021年", "jp": "ぼくたちのリメイク", "romaji": "Bokutachi no Remake", "bgmId": "296870", "bgmCover": "https://lain.bgm.tv/pic/cover/l/1d/ea/296870_gtFm2.jpg", "tags": ["恋爱", "青春", "日常"], "synopsis": "28岁的游戏总监桥场恭也因公司破产而陷入人生低谷，借酒消愁睡着后，醒来竟发现自己穿越回了十年前的2006年。他放弃了原本的商学院，选择进入艺术大学映像学科，与未来将名声大噪的创作者们成为同班同学，共同开启一段青春重制物语。", "backupCover": "https://api.bgm.tv/v0/subjects/296870/image?type=large"}, {"id": 3, "title": "命运石之门", "displayTitle": "《命运石之门》", "year": 2011, "yearStr": "2011年", "jp": "STEINS;GATE", "romaji": "Steins;Gate", "bgmId": "10380", "bgmCover": "https://lain.bgm.tv/pic/cover/l/a9/79/10380_YwP4R.jpg", "tags": ["科幻", "悬疑", "智斗", "恋爱"], "synopsis": "自称疯狂科学家的大学生冈部伦太郎，在秋叶原成立了“未来道具研究所”。某天他与伙伴们偶然发明出能将短信发送至过去的“电话微波炉”，并因此卷入世界线变动的巨大漩涡。为拯救重要之人，他不惜在无数次时间跳跃中孤身对抗残酷的命运收束。", "backupCover": "https://api.bgm.tv/v0/subjects/10380/image?type=large"}, {"id": 4, "title": "青之箱", "displayTitle": "《青之箱》", "year": 2024, "yearStr": "2024年", "jp": "アオのハコ", "romaji": "Ao no Hako", "bgmId": "460306", "bgmCover": "https://lain.bgm.tv/pic/cover/l/ab/e5/460306_s7Y8n.jpg", "tags": ["恋爱", "青春", "热血", "日常"], "synopsis": "就读于中高一贯制体育名校荣明学园的男子羽毛球部成员猪股大喜，每天清晨都在体育馆里与暗恋的女子篮球部王牌学姐鹿野千夏一同晨练。某天，因千夏父母出国工作，她意外住进了大喜家中。在同一屋檐下，两人纯真炙热的青春与恋爱悄然发芽。", "backupCover": "https://api.bgm.tv/v0/subjects/460306/image?type=large"}, {"id": 5, "title": "全缉毒狂潮", "displayTitle": "《全缉毒狂潮》", "year": 2019, "yearStr": "2019年", "jp": "コップクラフト", "romaji": "Cop Craft", "bgmId": "270422", "bgmCover": "https://lain.bgm.tv/pic/cover/l/14/f7/270422_HjK2l.jpg", "tags": ["奇幻", "悬疑", "热血"], "synopsis": "十五年前，太平洋上出现通往异世界“莱特·塞玛尼”的超空间大门，两个世界的移民交汇于圣特雷萨市。老练刑警桂·的场在搭档殉职后，被迫与来自异世界的见习女骑士缇拉娜组成跨界搭档。文化与观念截然不同的两人联手追查潜藏在城市暗处的跨界犯罪。", "backupCover": "https://api.bgm.tv/v0/subjects/270422/image?type=large"}, {"id": 6, "title": "间谍过家家", "displayTitle": "《间谍过家家》", "year": 2022, "yearStr": "2022年", "jp": "SPY×FAMILY", "romaji": "Spy x Family", "bgmId": "329906", "bgmCover": "https://lain.bgm.tv/pic/cover/l/de/4a/329906_hmtVD.jpg", "tags": ["搞笑", "日常", "智斗"], "synopsis": "为潜入名校接近威胁东西和平的政要，西国顶尖间谍“黄昏”化名劳埃德·福杰，必须在七天内组建家庭。然而他收养的女儿阿尼亚竟是能读心的超能力者，协议结婚的妻子约尔则是代号“荆棘公主”的职业杀手。互相隐瞒真实身份的三人，就此展开啼笑皆非的家庭日常。", "backupCover": "https://api.bgm.tv/v0/subjects/329906/image?type=large"}, {"id": 7, "title": "来自深渊", "displayTitle": "《来自深渊》", "year": 2017, "yearStr": "2017年", "jp": "メイドインアビス", "romaji": "Made in Abyss", "bgmId": "230914", "bgmCover": "https://lain.bgm.tv/pic/cover/l/e2/fd/230914_689H6.jpg", "tags": ["奇幻", "悬疑", "热血"], "synopsis": "在孤岛奥斯镇中央，存在着直径约一千米的巨大垂直洞穴“阿比斯”，内部栖息着奇异生物与远古遗物，同时伴随严酷的上升负荷诅咒。见习探窟家少女莉可为了寻找母亲的踪迹，与拥有人类外貌的失忆机器人少年雷古结伴，踏上了前往深渊最底层的单程冒险。", "backupCover": "https://api.bgm.tv/v0/subjects/230914/image?type=large"}, {"id": 8, "title": "Just Because!", "displayTitle": "《Just Because!》", "year": 2017, "yearStr": "2017年", "jp": "Just Because!", "romaji": "Just Because!", "bgmId": "212278", "bgmCover": "https://lain.bgm.tv/pic/cover/l/cf/9d/212278_zwYLL.jpg", "tags": ["恋爱", "青春", "日常"], "synopsis": "高三冬季，距离高中毕业仅剩短短数月，原本平静等待毕业的学生们，因初中时代搬家离开的同学泉瑛太突然转学归来而打破了宁静。旧友重逢如同一颗投入湖面的石子，让暗恋、犹豫与对未来的迷茫再次交织，谱写出一段细腻真实的冬日青春群像。", "backupCover": "https://api.bgm.tv/v0/subjects/212278/image?type=large"}, {"id": 9, "title": "如果有妹妹就好了。", "displayTitle": "《如果有妹妹就好了。》", "year": 2017, "yearStr": "2017年", "jp": "妹さえいればいい。", "romaji": "Imouto sae Ireba Ii.", "bgmId": "213076", "bgmCover": "https://api.bgm.tv/v0/subjects/213076/image?type=large", "tags": ["恋爱", "青春", "搞笑", "日常"], "synopsis": "重度妹控轻小说作家羽岛伊月，整日执着于创作关于妹妹的小说。在他身边聚集着全能型美少女作家可儿那由多、大学好友白川京、同行不破春斗，以及看似完美实则女扮男装的弟弟羽岛千寻。在欢闹的桌游聚会与截稿地狱中，众人展开了充满理想与苦恼的青春日常。", "backupCover": "https://api.bgm.tv/v0/subjects/213076/image?type=large"}, {"id": 10, "title": "昨日之歌", "displayTitle": "《昨日之歌》", "year": 2020, "yearStr": "2020年", "jp": "イエスタデイをうたって", "romaji": "Yesterday wo Utatte", "bgmId": "280516", "bgmCover": "https://api.bgm.tv/v0/subjects/280516/image?type=large", "tags": ["恋爱", "青春", "日常"], "synopsis": "大学毕业后没有固定工作、在便利店打工的鱼住陆生，对未来感到迷茫。某天，带着乌鸦的神秘少女野中晴闯入他的生活，而他暗恋多年的大学同学森之目榀子也回到东京任教。在东京街头的四季流转中，几个在感情与生活里踌躇的年轻人缓慢寻找着前行的方向。", "backupCover": "https://api.bgm.tv/v0/subjects/280516/image?type=large"}, {"id": 11, "title": "杀爱", "displayTitle": "《杀爱》", "year": 2022, "yearStr": "2022年", "jp": "殺し愛", "romaji": "Koroshi Ai", "bgmId": "321825", "bgmCover": "https://lain.bgm.tv/pic/cover/l/89/74/321825_U582H.jpg", "tags": ["悬疑", "恋爱", "智斗"], "synopsis": "高冷干练的新人赏金猎人夏朵·丹克沃斯，在一次任务中邂逅了身手诡谲的通缉犯杀手宋良博。宋良博非但没有杀她，反而以任务情报为条件，展开了令人捉摸不透的追求。随着黑帮阴谋与一桩桩委托案件浮出水面，两人多年前尘封的过往与真实身份也逐渐揭晓。", "backupCover": "https://api.bgm.tv/v0/subjects/321825/image?type=large"}, {"id": 12, "title": "在地下城寻求邂逅是否搞错了什么", "displayTitle": "《在地下城寻求邂逅是否搞错了什么》", "year": 2015, "yearStr": "2015年", "jp": "ダンジョンに出会いを求めるのは間違っているだろうか", "romaji": "DanMachi", "bgmId": "88942", "bgmCover": "https://lain.bgm.tv/pic/cover/l/f8/d9/88942_fpvGB.jpg", "tags": ["奇幻", "热血", "恋爱"], "synopsis": "坐落于巨大地下迷宫之上的迷宫都市欧拉丽，是众神与冒险者云集之地。孤身一人的新人冒险者贝尔·克朗尼，在女神赫斯缇雅的眷族中开始探索地下城。某日在迷宫深处遭遇强敌牛头人时，他被“剑姬”艾丝·华伦斯坦救下，自此立志变强，谱写属于英雄的成长传说。", "backupCover": "https://api.bgm.tv/v0/subjects/88942/image?type=large"}, {"id": 13, "title": "进击的巨人", "displayTitle": "《进击的巨人》", "year": 2013, "yearStr": "2013年", "jp": "進撃の巨人", "romaji": "Shingeki no Kyojin", "bgmId": "55770", "bgmCover": "https://lain.bgm.tv/pic/cover/l/78/c9/55770_HsJfh.jpg", "tags": ["热血", "奇幻", "悬疑", "智斗"], "synopsis": "百年前神秘出现的巨人几乎吞噬了整个人类文明，幸存者筑起三道高耸入云的巨墙以求苟安。向往墙外自由世界的少年艾伦·耶格尔，在目睹超大型巨人撞破城墙、家园沦陷的惨剧后，与三笠、阿尔敏一同加入调查兵团，在绝望的厮杀中揭开世界与巨人的惊天真相。", "backupCover": "https://api.bgm.tv/v0/subjects/55770/image?type=large"}, {"id": 14, "title": "胆大党", "displayTitle": "《胆大党》", "year": 2024, "yearStr": "2024年", "jp": "ダンダダン", "romaji": "Dandadan", "bgmId": "467461", "bgmCover": "https://lain.bgm.tv/pic/cover/l/44/7d/467461_HHw4K.jpg", "tags": ["热血", "奇幻", "搞笑", "恋爱"], "synopsis": "出生在灵媒师家庭、相信幽灵却否定外星人的高中女生绫濑桃，与痴迷外星人却不信幽灵的同级生高仓健（厄卡伦）争执不下，两人各自前往传闻地点验证真伪。不料两人分别遭遇了真正的外星人与高速婆婆，并在怪异危机中觉醒超能力，开启了荒诞热血的超自然战斗。", "backupCover": "https://api.bgm.tv/v0/subjects/467461/image?type=large"}, {"id": 15, "title": "我心里危险的东西", "displayTitle": "《我心里危险的东西》", "year": 2023, "yearStr": "2023年", "jp": "僕の心のヤバイやつ", "romaji": "Boku no Kokoro no Yabai Yatsu", "bgmId": "394260", "bgmCover": "https://lain.bgm.tv/pic/cover/l/01/ee/394260_VMqvV.jpg", "tags": ["恋爱", "青春", "日常"], "synopsis": "性格阴郁、有着重度中二病妄想的初中男生市川京太郎，常躲在图书室角落观察班级食物链顶端的阳光美少女山田杏奈。起初他以为山田遥不可及，却偶然撞见她在图书室偷偷吃零食的天然一面。随着一次次笨拙却真诚的日常互动，两人心底的懵懂爱意渐渐升温。", "backupCover": "https://api.bgm.tv/v0/subjects/394260/image?type=large"}, {"id": 16, "title": "真实之泪", "displayTitle": "《真实之泪》", "year": 2008, "yearStr": "2008年", "jp": "true tears", "romaji": "true tears", "bgmId": "309", "bgmCover": "https://lain.bgm.tv/pic/cover/l/ed/de/309_958Es.jpg", "tags": ["恋爱", "青春", "日常"], "synopsis": "立志成为绘本作家的高中生仲上真一郎，与因变故寄宿在自己家中的青梅竹马汤浅比吕美同住一屋，两人之间却始终隔着一层无形的坚冰。某天，真一郎在校园偶遇了将眼泪托付给雷轰丸的奇妙少女石动乃绘，连同好友安藤爱子在内，少年少女们迎来了寻找真实泪水的青春物语。", "backupCover": "https://api.bgm.tv/v0/subjects/309/image?type=large"}, {"id": 17, "title": "我们大家的河合庄", "displayTitle": "《我们大家的河合庄》", "year": 2014, "yearStr": "2014年", "jp": "僕らはみんな河合荘", "romaji": "Bokura wa Minna Kawai-sou", "bgmId": "89216", "bgmCover": "https://lain.bgm.tv/pic/cover/l/0b/80/89216_ZQFLX.jpg", "tags": ["恋爱", "搞笑", "日常", "青春"], "synopsis": "因父母工作调动而终于实现独居梦想的高一新生宇佐和成，满怀期待地搬进了充满昭和气息的公寓“河合庄”，更惊喜地发现自己暗恋的文学少女学姐河合律也住在这里。然而与他们同住的还有一群性格古怪的奇葩室友，鸡飞狗跳又温馨甜蜜的合宿日常就此拉开帷幕。", "backupCover": "https://api.bgm.tv/v0/subjects/89216/image?type=large"}, {"id": 18, "title": "异度侵入 ID:INVADED", "displayTitle": "《异度侵入 ID:INVADED》", "year": 2020, "yearStr": "2020年", "jp": "ID:INVADED イド：インヴェイデッド", "romaji": "ID:INVADED", "bgmId": "285776", "bgmCover": "https://lain.bgm.tv/pic/cover/l/73/90/285776_57c5p.jpg", "tags": ["悬疑", "智斗", "科幻"], "synopsis": "利用能感知杀意粒子的系统“罔象女”，警方得以构建连环杀手深层意识形成的潜意识世界“杀意世界（井）”。曾是优秀刑警的鸣瓢秋人因痛失妻女而成为阶下囚，他在失去记忆的状态下作为名侦探“酒井户”潜入支离破碎的井中，抽丝剥茧追查幕后操控连环杀人犯的真凶。", "backupCover": "https://api.bgm.tv/v0/subjects/285776/image?type=large"}, {"id": 19, "title": "无职转生", "displayTitle": "《无职转生》", "year": 2021, "yearStr": "2021年", "jp": "無職転生 ～異世界行ったら本気だす～", "romaji": "Mushoku Tensei", "bgmId": "277554", "bgmCover": "https://lain.bgm.tv/pic/cover/l/8b/00/277554_z999u.jpg", "tags": ["异世界", "奇幻", "热血", "恋爱"], "synopsis": "34岁一事无成的家里蹲男子在车祸丧生后，带着前世记忆转生到了剑与魔法的异世界，成为下级骑士之子鲁迪乌斯·格雷拉特。痛定思痛的他发誓这一世一定要认真活下去。在家庭教师洛琪希的引导下，他克服心理阴影走出家门，开启了波澜壮阔的异世界大河冒险人生。", "backupCover": "https://api.bgm.tv/v0/subjects/277554/image?type=large"}, {"id": 20, "title": "异世界归来的舅舅", "displayTitle": "《异世界归来的舅舅》", "year": 2022, "yearStr": "2022年", "jp": "異世界おじさん", "romaji": "Isekai Ojisan", "bgmId": "339326", "bgmCover": "https://lain.bgm.tv/pic/cover/l/1a/75/339326_v466V.jpg", "tags": ["异世界", "搞笑", "奇幻", "日常"], "synopsis": "遭遇车祸昏迷了整整十七年的舅舅突然在病房苏醒，并声称自己这十七年一直身处异世界“格ac兰巴哈马尔”冒险，甚至现场展示了货真价实的魔法。外甥高丘敬文决定与舅舅同居并利用魔法拍视频赚钱，同时听这位世嘉游戏死忠粉舅舅讲述他在异世界令人捧腹的直男经历。", "backupCover": "https://api.bgm.tv/v0/subjects/339326/image?type=large"}, {"id": 21, "title": "异世界迷宫黑心企业", "displayTitle": "《异世界迷宫黑心企业》", "year": 2021, "yearStr": "2021年", "jp": "迷宮ブラックカンパニー", "romaji": "Meikyuu Black Company", "bgmId": "309668", "bgmCover": "https://lain.bgm.tv/pic/cover/l/cd/25/309668_i1qWh.jpg", "tags": ["异世界", "搞笑", "奇幻"], "synopsis": "靠着房产投资在现代社会过上优渥尼特生活的二之宫锦司，某天突然掉入异世界，并因背负巨额债务被迫在莱扎赫矿业沦为底层采掘社畜。为了夺回不用工作的懒散富豪生活，毫无道德包袱的他将现代商业手段与黑心话术发挥到极致，在异世界掀起一场反客为主的创业风暴。", "backupCover": "https://api.bgm.tv/v0/subjects/309668/image?type=large"}, {"id": 22, "title": "想要成为影之实力者！", "displayTitle": "《想要成为影之实力者！》", "year": 2022, "yearStr": "2022年", "jp": "陰の実力者になりたくて！", "romaji": "Kage no Jitsuryokusha ni Naritakute!", "bgmId": "329114", "bgmCover": "https://lain.bgm.tv/pic/cover/l/f0/3f/270199_10udD.jpg", "tags": ["异世界", "奇幻", "热血", "搞笑"], "synopsis": "向往既不是主角也不是最终头目、而是隐藏在暗处操盘全局的“影之实力者”的少年转生到异世界，成为男爵家次子希德·卡盖诺。为了演好中二剧本，他随口编造了“迪亚波罗斯教团”并招募部下组建暗影庭园，殊不知他随口胡诌的设定竟全是事实，错位感拉满的暗影传说就此上演。", "backupCover": "https://api.bgm.tv/v0/subjects/329114/image?type=large"}, {"id": 23, "title": "我的青春恋爱物语果然有问题。", "displayTitle": "《我的青春恋爱物语果然有问题。》", "year": 2013, "yearStr": "2013年", "jp": "やはり俺の青春ラブコメはまちがっている。", "romaji": "Yahari Ore no Seishun Love Comedy wa Machigatteiru.", "bgmId": "54433", "bgmCover": "https://lain.bgm.tv/pic/cover/l/1e/f1/54433_JZ99l.jpg", "tags": ["恋爱", "青春", "日常"], "synopsis": "性格别扭、没有朋友的高中生比企谷八幡，被指导老师平冢静强行塞进了只有一个部员的“侍奉部”，结识了完美却孤傲的美少女雪之下雪乃，以及温柔擅长察言观色的由比滨结衣。在解决学生们千奇百怪委托的过程中，三人从虚伪的客套走向了对“真物”的深刻追寻。", "backupCover": "https://api.bgm.tv/v0/subjects/54433/image?type=large"}, {"id": 24, "title": "ISLAND", "displayTitle": "《ISLAND》", "year": 2018, "yearStr": "2018年", "jp": "ISLAND", "romaji": "ISLAND", "bgmId": "175404", "bgmCover": "https://lain.bgm.tv/pic/cover/l/52/3b/175404_8AK6c.jpg", "tags": ["科幻", "悬疑", "恋爱"], "synopsis": "远离本土的南方小岛“浦岛”因煤尘病与古老传闻而日渐封闭。某天，一名失去记忆的青年漂流至海滩，他自称“切那”，肩负着拯救世界与跨越时间改变未来的使命。在与浦岛御三家的三位少女凛音、夏莲、纱罗相处的日子里，埋藏在岛屿背后的轮回秘密被层层揭开。", "backupCover": "https://api.bgm.tv/v0/subjects/175404/image?type=large"}, {"id": 25, "title": "GOSICK", "displayTitle": "《GOSICK》", "year": 2011, "yearStr": "2011年", "jp": "GOSICK -ゴシック-", "romaji": "Gosick", "bgmId": "9781", "bgmCover": "https://lain.bgm.tv/pic/cover/l/9d/3d/9781_Kkik8.jpg", "tags": ["悬疑", "智斗", "恋爱"], "synopsis": "1924年虚构的欧洲小国苏瓦尔，东方留学少年久城一弥在圣玛格丽特学园的巨大图书馆塔顶，邂逅了宛如人偶般娇小美丽、却拥有卓越推理头脑的少女维多利加·德·布洛瓦。两人携手破解一桩桩离奇诡异的神秘案件，并在动荡时代的暴风雨中紧紧握住彼此的双手。", "backupCover": "https://api.bgm.tv/v0/subjects/9781/image?type=large"}, {"id": 26, "title": "恋爱Flops", "displayTitle": "《恋爱Flops》", "year": 2022, "yearStr": "2022年", "jp": "恋愛フロップス", "romaji": "Renai Flops", "bgmId": "375735", "bgmCover": "https://lain.bgm.tv/pic/cover/l/ac/ba/375735_AR8Al.jpg", "tags": ["恋爱", "科幻", "搞笑", "悬疑"], "synopsis": "普通高中生柏树朝在电视AI占卜的指引下，接连在校门与课堂邂逅了五位来自世界各地的交换生与女教师，甚至阴差阳错地开始了热闹非凡的同居生活。然而在这场看似标准后宫喜剧的欢快日常背后，关于虚拟世界与少年过往记忆的科幻真相正悄然浮现。", "backupCover": "https://api.bgm.tv/v0/subjects/375735/image?type=large"}, {"id": 27, "title": "恋爱选举与巧克力", "displayTitle": "《恋爱选举与巧克力》", "year": 2012, "yearStr": "2012年", "jp": "恋と選挙とチョコレート", "romaji": "Koi to Senkyo to Chocolate", "bgmId": "27236", "bgmCover": "https://lain.bgm.tv/pic/cover/l/5a/18/27236_7T6Is.jpg", "tags": ["恋爱", "青春", "智斗"], "synopsis": "拥有超过六千名学生的巨型名校高藤学园，其自治学生会掌握着庞大的预算分配权。为了保住面临废部危机的“食品研究部”，部员大岛裕树在青梅竹马住吉千里等人的推动下，毅然决定参选下一任学生会长，在与治安部及各方派系的博弈中展开学园选举与恋爱物语。", "backupCover": "https://api.bgm.tv/v0/subjects/27236/image?type=large"}, {"id": 28, "title": "GAMERS电玩咖！", "displayTitle": "《GAMERS电玩咖！》", "year": 2017, "yearStr": "2017年", "jp": "ゲーマーズ！", "romaji": "Gamers!", "bgmId": "195816", "bgmCover": "https://lain.bgm.tv/pic/cover/l/c9/f3/195816_oXlKL.jpg", "tags": ["恋爱", "搞笑", "青春", "日常"], "synopsis": "平凡的高中生雨野景太是个纯粹享受游戏乐趣的普通玩家，某天却突然受到全校公认的完美美少女、游戏部部长天道花怜的入部邀请。然而景太因拒绝追求胜负的竞技理念而婉拒入部，由此引发了包括星之守千秋、亚玖璃与上原祐在内的五人错综复杂的爆笑误会恋爱剧。", "backupCover": "https://api.bgm.tv/v0/subjects/195816/image?type=large"}, {"id": 29, "title": "租借女友", "displayTitle": "《租借女友》", "year": 2020, "yearStr": "2020年", "jp": "彼女、お借りします", "romaji": "Kanojo, Okarishimasu", "bgmId": "533027", "bgmCover": "https://lain.bgm.tv/pic/cover/l/97/ba/533027_q6S52.jpg", "tags": ["恋爱", "青春", "搞笑", "日常"], "synopsis": "刚被交往一个月的初恋女友甩掉的废柴大学生木之下和也，赌气在手机应用上预约了“租借女友”服务，赴约的竟是容貌出众、温柔体贴的美少女水原千鹤。因双方祖母同住一家医院的巧合，两人在家人面前被迫假扮真情侣，并发现彼此竟是同校且住在隔壁的邻居。", "backupCover": "https://api.bgm.tv/v0/subjects/533027/image?type=large"}, {"id": 30, "title": "青之芦苇", "displayTitle": "《青之芦苇》", "year": 2022, "yearStr": "2022年", "jp": "アオアシ", "romaji": "Aoashi", "bgmId": "337459", "bgmCover": "https://lain.bgm.tv/pic/cover/l/66/d2/337459_OPT8c.jpg", "tags": ["热血", "青春"], "synopsis": "生活在爱媛县的初中足球少年青井苇人，虽然基本功粗糙且性格冲动，却拥有俯瞰整座球场的惊人空间视野。在输掉初中最后一场比赛后，他被东京J联赛豪门青年队教练福田达也发掘，独自一人前往东京参加选拔，踏上了从前锋转型为组织型边后卫的职业足球之路。", "backupCover": "https://api.bgm.tv/v0/subjects/337459/image?type=large"}, {"id": 31, "title": "炎炎消防队", "displayTitle": "《炎炎消防队》", "year": 2019, "yearStr": "2019年", "jp": "炎炎ノ消防隊", "romaji": "Enen no Shouboutai", "bgmId": "266372", "bgmCover": "https://lain.bgm.tv/pic/cover/l/e5/f5/266372_2E8SA.jpg", "tags": ["热血", "奇幻", "科幻"], "synopsis": "太阳历198年，东京频繁发生普通人突然全身起火化为狂暴怪物“焰人”的人体自燃现象。因紧张时会露出诡异笑容而被称为“恶魔”的第三世代能力者少年森罗日下部，为了查明十二年前烧死家人的火灾真相并成为英雄，加入了专门镇魂焰人并调查内幕的第8特殊消防队。", "backupCover": "https://api.bgm.tv/v0/subjects/266372/image?type=large"}, {"id": 32, "title": "总之就是非常可爱", "displayTitle": "《总之就是非常可爱》", "year": 2020, "yearStr": "2020年", "jp": "トニカクカワイイ", "romaji": "Tonikaku Kawaii", "bgmId": "301541", "bgmCover": "https://lain.bgm.tv/pic/cover/l/66/50/301541_p2z4K.jpg", "tags": ["恋爱", "日常", "搞笑"], "synopsis": "从小因怪异名字“星空”而发奋努力的少年由崎星空，在高考前夕的雪夜偶遇神秘美少女月读司，并在遭遇车祸时被她救下。深受触动的星空强忍重伤向她表白，司提出“如果愿意和我结婚就跟你交往”。两年后，18岁的星空等来了履约的司，先婚后爱的甜蜜新婚日常正式开启。", "backupCover": "https://api.bgm.tv/v0/subjects/301541/image?type=large"}, {"id": 33, "title": "京都寺町三条商店街的福尔摩斯", "displayTitle": "《京都寺町三条商店街的福尔摩斯》", "year": 2018, "yearStr": "2018年", "jp": "京都寺町三条のホームズ", "romaji": "Kyoto Teramachi Sanjou no Holmes", "bgmId": "240229", "bgmCover": "https://lain.bgm.tv/pic/cover/l/5c/a8/240229_U0bOG.jpg", "tags": ["悬疑", "恋爱", "日常"], "synopsis": "女高中生真城葵搬家来到京都，为了鉴定祖父留下的古董来到寺町三条商店街的古董店“藏”，结识了店主的孙子、被称为“寺町三条的福尔摩斯”的青年鉴定师家头清贵。清贵一眼看穿了葵隐瞒的苦衷并邀请她在店里打工，两人在古都四季中围绕古董展开温和的日常推理。", "backupCover": "https://api.bgm.tv/v0/subjects/240229/image?type=large"}, {"id": 34, "title": "夫妇以上，恋人未满。", "displayTitle": "《夫妇以上，恋人未满。》", "year": 2022, "yearStr": "2022年", "jp": "夫婦以上、恋人未満。", "romaji": "Fuufu Ijou, Koibito Miman.", "bgmId": "239336", "bgmCover": "https://lain.bgm.tv/pic/cover/l/17/ce/239336_Hl4hH.jpg", "tags": ["恋爱", "青春", "搞笑", "日常"], "synopsis": "青瞬学院设有一项独特的“夫妇实习”课程，高三学生必须抽签组成模拟夫妻在同一公寓生活并接受评分。内向的宅男药院次郎本想与暗恋的青梅竹马樱坂诗织同组，却阴差阳错地与现充辣妹渡边星配对。为了拿下高分各自交换搭档，两人开始了假戏真做的同居生活。", "backupCover": "https://api.bgm.tv/v0/subjects/239336/image?type=large"}, {"id": 35, "title": "刀剑神域", "displayTitle": "《刀剑神域》", "year": 2012, "yearStr": "2012年", "jp": "ソードアート・オンライン", "romaji": "Sword Art Online", "bgmId": "23686", "bgmCover": "https://lain.bgm.tv/pic/cover/l/2e/c8/23686_e36x9.jpg", "tags": ["奇幻", "科幻", "热血", "恋爱"], "synopsis": "2022年，全球首款完全潜行虚拟现实MMORPG《刀剑神域（SAO）》正式开服。然而一万名玩家登录后却发现无法登出，游戏创造者茅场晶彦宣布：唯有打倒艾恩葛朗特第一百层的头目才能解放，而在游戏中死亡意味着现实中的脑死亡。黑衣剑士桐人就此踏上生死攻略战。", "backupCover": "https://api.bgm.tv/v0/subjects/23686/image?type=large"}, {"id": 36, "title": "监狱学园", "displayTitle": "《监狱学园》", "year": 2015, "yearStr": "2015年", "jp": "監獄学園", "romaji": "Prison School", "bgmId": "110048", "bgmCover": "https://api.bgm.tv/v0/subjects/110048/image?type=large", "tags": ["搞笑", "青春", "智斗"], "synopsis": "原本历史悠久的传统女校私立八光学园，自今年起改为男女合校，但全校逾千名学生中仅有藤野清志等五名男生入学。五人因按捺不住好奇心偷窥女澡堂，被铁腕统治校园的“里学生会”逮捕并关入校内惩戒栋（监狱）劳改一个月。为求自由与约会，五人展开了缜密爆笑的越狱大计。", "backupCover": "https://api.bgm.tv/v0/subjects/110048/image?type=large"}, {"id": 37, "title": "回复术士的重启人生", "displayTitle": "《回复术士的重启人生》", "year": 2021, "yearStr": "2021年", "jp": "回復術士のやり直し", "romaji": "Kaifuku Jutsushi no Yarinaoshi", "bgmId": "295017", "bgmCover": "https://lain.bgm.tv/pic/cover/l/c7/3f/295017_90As6.jpg", "tags": ["奇幻", "热血", "智斗"], "synopsis": "在乡下过着平静生活的少年克亚尔，觉醒了“愈”之勇者的资质后，却遭到吉欧拉尔王国勇者队伍的长期虐待与剥削。在讨伐魔王的最终战中，恢复自我意识的他夺取了能让世界回溯的“贤者之石”，对整个世界施展“回复”回到四年前，凭借未来记忆开启了冷酷果决的复仇之旅。", "backupCover": "https://api.bgm.tv/v0/subjects/295017/image?type=large"}, {"id": 38, "title": "彻夜之歌", "displayTitle": "《彻夜之歌》", "year": 2022, "yearStr": "2022年", "jp": "よふかしのうた", "romaji": "Yofukashi no Uta", "bgmId": "287723", "bgmCover": "https://lain.bgm.tv/pic/cover/l/8f/13/287723_esWpN.jpg", "tags": ["恋爱", "奇幻", "青春", "日常"], "synopsis": "因厌倦白天的社交而厌学失眠的初二男生夜守光，某夜独自溜出家门游荡，偶遇了热爱夜间漫步与畅饮的美丽吸血鬼少女七草荠。深深迷上夜晚自由气息的光请求变成吸血鬼，却得知成为眷属的条件是“必须先爱上吸血鬼本人”。不懂恋爱的少年与吸血鬼少女就此展开漫长的熬夜物语。", "backupCover": "https://api.bgm.tv/v0/subjects/287723/image?type=large"}, {"id": 39, "title": "为美好的世界献上祝福！", "displayTitle": "《为美好的世界献上祝福！》", "year": 2016, "yearStr": "2016年", "jp": "この素晴らしい世界に祝福を！", "romaji": "Kono Subarashii Sekai ni Shukufuku wo!", "bgmId": "135275", "bgmCover": "https://lain.bgm.tv/pic/cover/l/56/de/135275_G3liq.jpg", "tags": ["异世界", "搞笑", "奇幻", "日常"], "synopsis": "热爱游戏的家里蹲少年佐藤和真因一场滑稽的意外丧生，在转生异世界时，他记恨水之女神阿库娅的嘲讽，竟直接将这位女神选为“转生外挂”一并拖入异世界。再加上一天只能放一发爆裂魔法的中二法师惠惠、防御力点满却打不中怪的圣骑士达克妮斯，问题小队的搞笑冒险全面展开。", "backupCover": "https://api.bgm.tv/v0/subjects/135275/image?type=large"}, {"id": 40, "title": "路人女主的养成方法", "displayTitle": "《路人女主的养成方法》", "year": 2015, "yearStr": "2015年", "jp": "冴えない彼女の育てかた", "romaji": "Saenai Heroine no Sodatekata", "bgmId": "100403", "bgmCover": "https://lain.bgm.tv/pic/cover/l/6b/01/100403_R8KN2.jpg", "tags": ["恋爱", "青春", "搞笑", "日常"], "synopsis": "御宅族高中生安艺伦也在樱花飞舞的坡道上，偶遇了一位捡起贝雷帽的少女，大受震撼的他决定以该少女为第一女主角制作同人美少女游戏。不久后他才发现，这位少女竟是同班毫无存在感的普通同学加藤惠。伦也拉来王牌插画师泽村·斯潘塞·英梨梨与人气作家霞之丘诗羽，开始把路人调教成心动女主。", "backupCover": "https://api.bgm.tv/v0/subjects/100403/image?type=large"}, {"id": 41, "title": "五等分的新娘", "displayTitle": "《五等分的新娘》", "year": 2019, "yearStr": "2019年", "jp": "五等分の花嫁", "romaji": "Go-toubun no Hanayome", "bgmId": "256114", "bgmCover": "https://lain.bgm.tv/pic/cover/l/fd/cd/256114_mvRVq.jpg", "tags": ["恋爱", "青春", "搞笑", "日常"], "synopsis": "家境贫寒却成绩优异的高二男生上杉风太郎，获得了一份报酬丰厚的家庭教师兼职。然而他的学生竟是刚转学过来的富家同级生——中野家的五胞胎美少女：一花、二乃、三玖、四叶、五月。面对全部厌学且处于留级边缘的五姐妹，风太郎必须想方设法赢得她们的信任，带领全员顺利毕业。", "backupCover": "https://api.bgm.tv/v0/subjects/256114/image?type=large"}, {"id": 42, "title": "欢迎来到实力至上主义的教室", "displayTitle": "《欢迎来到实力至上主义的教室》", "year": 2017, "yearStr": "2017年", "jp": "ようこそ実力至上主義の教室へ", "romaji": "Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e", "bgmId": "214272", "bgmCover": "https://lain.bgm.tv/pic/cover/l/87/01/214272_vlcWz.jpg", "tags": ["智斗", "青春", "悬疑"], "synopsis": "东京都高度育成高中对外宣称升学就业率百分之百，学生每月还能获得价值十万日元的点数。然而入学在最底层D班的绫小路清隆很快发现，学校奉行残酷的实力至上规则，所有待遇完全取决于班级评价分数。习惯隐藏锋芒的清隆，在幕后推动堀北铃音等人与各班展开激烈智斗。", "backupCover": "https://api.bgm.tv/v0/subjects/214272/image?type=large"}, {"id": 43, "title": "精灵幻想记", "displayTitle": "《精灵幻想记》", "year": 2021, "yearStr": "2021年", "jp": "精霊幻想記", "romaji": "Seirei Gensouki", "bgmId": "320851", "bgmCover": "https://lain.bgm.tv/pic/cover/l/ad/ee/320851_MPMXr.jpg", "tags": ["异世界", "奇幻", "恋爱", "热血"], "synopsis": "生活在异世界贝尔特姆王国贫民窟的七岁孤儿利欧，在一次意外中同时觉醒了前世日本大学生天川春人的记忆与强大的精灵术潜能。他意外救下被绑架的王国二公主，受封破例进入贵族云集的王立学院就读。面对贵族的排挤与追杀母仇的宿命，利欧踏上了跨越大陆的修行与寻根之旅。", "backupCover": "https://api.bgm.tv/v0/subjects/320851/image?type=large"}, {"id": 44, "title": "我独自升级", "displayTitle": "《我独自升级》", "year": 2024, "yearStr": "2024年", "jp": "俺だけレベルアップな件", "romaji": "Ore dake Level Up na Ken", "bgmId": "390353", "bgmCover": "https://lain.bgm.tv/pic/cover/l/f5/2e/390353_07vz7.jpg", "tags": ["奇幻", "热血"], "synopsis": "十年前，连接异次元与现实世界的“传送门”突然出现，觉醒超凡能力的人类被称为“猎人”。被称为“人类最弱兵器”的E级猎人程肖宇，为筹集母亲的医药费硬着头皮参加攻略，却在双重地下城中遭遇团灭危机。濒死之际他获得了全世界唯一能像游戏般不断升级的系统，自此开启暗影君王的崛起之路。", "backupCover": "https://api.bgm.tv/v0/subjects/390353/image?type=large"}, {"id": 45, "title": "治愈魔法的错误使用方法", "displayTitle": "《治愈魔法的错误使用方法》", "year": 2024, "yearStr": "2024年", "jp": "治癒魔法の間違った使い方", "romaji": "Chiyu Mahou no Machigatta Tsukaikata", "bgmId": "346426", "bgmCover": "https://lain.bgm.tv/pic/cover/l/f8/fc/346426_417Ri.jpg", "tags": ["异世界", "奇幻", "热血", "搞笑"], "synopsis": "平凡的高中生兔里在放学途中，偶然与学生会长铃音、同班同学一树一同被召唤到林格尔王国成为勇者。原本以为只是被卷入的兔里，却检测出罕见的“治愈魔法”适性，随即被救命团团长罗丝强行带走。在严酷到令人窒息的地狱式体能训练下，他练就了用治愈魔法强化肉体挥拳冲锋的独特战斗方式。", "backupCover": "https://api.bgm.tv/v0/subjects/346426/image?type=large"}, {"id": 46, "title": "僵尸100～变成僵尸之前想做的100件事～", "displayTitle": "《僵尸100～变成僵尸之前想做的100件事～》", "year": 2023, "yearStr": "2023年", "jp": "ゾン100～ゾンビになるまでにしたい100のこと～", "romaji": "Zom 100: Bucket List of the Dead", "bgmId": "414461", "bgmCover": "https://api.bgm.tv/v0/subjects/414461/image?type=large", "tags": ["搞笑", "热血", "日常"], "synopsis": "在黑心血汗公司连续加班三年的天道辉，身心俱疲、眼神失去高光。某天清晨推开家门，他发现整个东京已经被僵尸潮彻底攻陷。面对满街丧尸，天道辉脑海中浮现的第一句话竟是“从今天起不用再去公司上班了”！重获自由的他买来笔记本，写下变成僵尸前想完成的100个愿望并逐一实现。", "backupCover": "https://zom100.com/assets/top/t1/vis2.jpg"}, {"id": 47, "title": "旗扬！兽道", "displayTitle": "《旗扬！兽道》", "year": 2019, "yearStr": "2019年", "jp": "旗揚！けものみち", "romaji": "Hataage! Kemonomichi", "bgmId": "272034", "bgmCover": "https://lain.bgm.tv/pic/cover/l/6b/24/272034_xWcCC.jpg", "tags": ["异世界", "搞笑", "奇幻"], "synopsis": "极度热爱各类动物的职业摔角手“假面动物狂”柴田源藏，在世界冠军争夺战开场瞬间被召唤到了异世界。当王国公主请求他消灭威胁人类的“魔兽”时，把魔兽视作可爱宠物的源藏勃然大怒，当场对公主使出一记德式背摔后逃离王宫，在异世界朝着开设魔兽宠物店的梦想一路狂奔。", "backupCover": "https://api.bgm.tv/v0/subjects/272034/image?type=large"}, {"id": 48, "title": "ReLIFE 重返17岁", "displayTitle": "《ReLIFE 重返17岁》", "year": 2016, "yearStr": "2016年", "jp": "ReLIFE", "romaji": "ReLIFE", "bgmId": "126173", "bgmCover": "https://lain.bgm.tv/pic/cover/l/e0/a2/126173_II0Y1.jpg", "tags": ["恋爱", "青春", "日常"], "synopsis": "27岁的无业青年海崎新太在第一份工作辞职后屡屡求职受挫。走投无路之际，自称“重生研究所”职员的夜明了找上门来，邀请他参加为期一年的社会复归实验：服下秘药将外表变回17岁，重新作为高三学生体验高中生活。在与笨拙少女日代千鹤等同学的相处中，他渐渐找回了久违的勇气。", "backupCover": "https://api.bgm.tv/v0/subjects/126173/image?type=large"}, {"id": 49, "title": "家有女友", "displayTitle": "《家有女友》", "year": 2019, "yearStr": "2019年", "jp": "ドメスティックな彼女", "romaji": "Domestic na Kanojo", "bgmId": "253628", "bgmCover": "https://lain.bgm.tv/pic/cover/l/33/f9/253628_F42y2.jpg", "tags": ["恋爱", "青春"], "synopsis": "立志成为小说家的高中生藤井夏生，一直暗恋着学校里开朗受人欢迎的英语老师橘阳菜。为了排解苦闷，他在联谊会上结识了冷淡的同龄少女橘瑠衣。然而不久后，夏生的父亲宣布再婚，再婚对象带来的两个女儿竟然正是阳菜与瑠衣！瞬间变成义理姐弟的三人，在同居生活中陷入了酸楚纠葛的恋情。", "backupCover": "https://api.bgm.tv/v0/subjects/253628/image?type=large"}, {"id": 50, "title": "月色真美", "displayTitle": "《月色真美》", "year": 2017, "yearStr": "2017年", "jp": "月がきれい", "romaji": "Tsuki ga Kirei", "bgmId": "207573", "bgmCover": "https://lain.bgm.tv/pic/cover/l/a8/41/207573_95N29.jpg", "tags": ["恋爱", "青春", "日常"], "synopsis": "升入初三的安昙小太郎与水野茜首次被分到了同一个班级。热爱阅读与写作、在文艺部担任部长的内向少年小太郎，与在田径部努力奔跑、紧张时喜欢捏红薯玩偶的少女茜，因家庭聚餐的偶遇与运动会器材筹备而渐渐熟悉。在LINE消息的往来与青涩悸动中，一段纯粹细腻的初恋悄然绽放。", "backupCover": "https://api.bgm.tv/v0/subjects/207573/image?type=large"}, {"id": 51, "title": "只要长得可爱，即使是变态你也喜欢吗？", "displayTitle": "《只要长得可爱，即使是变态你也喜欢吗？》", "year": 2019, "yearStr": "2019年", "jp": "可愛ければ変態でも好きになってくれますか？", "romaji": "Kawaikereba Hentai demo Suki ni Natte Kuremasu ka?", "bgmId": "275371", "bgmCover": "https://lain.bgm.tv/pic/cover/l/54/bb/275371_naGaN.jpg", "tags": ["恋爱", "搞笑", "青春"], "synopsis": "从未谈过恋爱的高中生桐生慧辉，某天在书法部收到了一封没有署名的情书，里面竟然还附带了一条纯白胖次！为了找出这位落下一只水晶鞋的“灰姑娘”，慧辉对身边四位可爱的美少女逐一展开调查，没想到随着真相层层剥开，他发现每一位候选者背后都隐藏着令人跌破眼镜的特殊癖好。", "backupCover": "https://api.bgm.tv/v0/subjects/275371/image?type=large"}, {"id": 52, "title": "邻人似银河", "displayTitle": "《邻人似银河》", "year": 2023, "yearStr": "2023年", "jp": "おとなりに銀河", "romaji": "Otonari ni Ginga", "bgmId": "379442", "bgmCover": "https://lain.bgm.tv/pic/cover/l/e1/34/379442_l87Dd.jpg", "tags": ["恋爱", "日常", "奇幻"], "synopsis": "在父亲去世后，年轻的少女漫画家久我一郎为了抚养年幼的弟妹，一面靠公寓租金维持生计，一面拼命画稿。就在截稿压力山大之际，一位画技高超、容貌端庄的新人助手五色栞应聘而来。不料一次意外触碰了栞身上的尖刺后，栞竟郑重宣布自己来自流星民一族，两人已缔结了婚姻契约。", "backupCover": "https://api.bgm.tv/v0/subjects/379442/image?type=large"}, {"id": 53, "title": "乙女游戏世界对路人角色很不友好", "displayTitle": "《乙女游戏世界对路人角色很不友好》", "year": 2022, "yearStr": "2022年", "jp": "乙女ゲー世界はモブに厳しい世界です", "romaji": "Otome Game Sekai wa Mob ni Kibishii Sekai desu", "bgmId": "359980", "bgmCover": "https://lain.bgm.tv/pic/cover/l/38/2b/359980_JRjE0.jpg", "tags": ["异世界", "奇幻", "热血", "搞笑"], "synopsis": "现代社畜青年因替妹妹通宵打通一款女尊男卑的硬核乙女游戏而过劳猝死，转生后竟发现自己成为了该游戏世界里的乡下男爵三男——路人角色里昂。为了逃离被当作相亲工具人的命运，他利用前世攻略记忆抢先找到失落遗产飞空艇与毒舌AI卢克西翁，在贵族学园里开启了痛快淋漓的打脸逆袭。", "backupCover": "https://api.bgm.tv/v0/subjects/359980/image?type=large"}, {"id": 54, "title": "如果究极进化的完全沉浸RPG比现实更垃圾的话", "displayTitle": "《如果究极进化的完全沉浸RPG比现实更垃圾的话》", "year": 2021, "yearStr": "2021年", "jp": "究極進化したフルダイブRPGが現実よりもクソゲーだったら", "romaji": "Full Dive: This Ultimate Next-Gen Full Dive RPG Is Even Shittier than Real Life!", "bgmId": "321407", "bgmCover": "https://lain.bgm.tv/pic/cover/l/6c/16/321407_YN7l2.jpg", "tags": ["搞笑", "奇幻"], "synopsis": "隐藏着过去心理阴影的高中生结城宏，在诡异店员如月玲于的忽悠下，买下了十年前发行的冷门完全沉浸VR游戏《极·任务》。这款游戏因为把痛觉、体能消耗和人际关系还原得过于真实，导致一旦NPC死亡就无法复活，被玩家骂作史上最垃圾粪作。开局就把青梅竹马NPC误杀的宏，被迫展开苦难求生。", "backupCover": "https://api.bgm.tv/v0/subjects/321407/image?type=large"}, {"id": 55, "title": "线上游戏的老婆不可能是女生？", "displayTitle": "《线上游戏的老婆不可能是女生？》", "year": 2016, "yearStr": "2016年", "jp": "ネトゲの嫁は女の子じゃないと思った？", "romaji": "Netoge no Yome wa Onnanoko ja Nai to Omotta?", "bgmId": "142758", "bgmCover": "https://lain.bgm.tv/pic/cover/l/64/bd/142758_4WO7N.jpg", "tags": ["恋爱", "搞笑", "青春", "日常"], "synopsis": "高中生西村英骑（网名卢西安）曾在网游中向女角色告白，却惨遭对方坦白“我是大叔”的沉重打击，自此深信网游里绝无真女生。两年后，同公会的女牧师亚子向他疯狂求婚。当公会四人决定在线下聚会时，英骑震惊地发现，游戏里的老婆亚子竟是同校容貌惊艳却分不清现实与游戏的重度宅女玉置亚子。", "backupCover": "https://api.bgm.tv/v0/subjects/142758/image?type=large"}, {"id": 56, "title": "甘城光辉游乐园", "displayTitle": "《甘城光辉游乐园》", "year": 2014, "yearStr": "2014年", "jp": "甘城ブリリアントパーク", "romaji": "Amagi Brilliant Park", "bgmId": "93545", "bgmCover": "https://lain.bgm.tv/pic/cover/l/69/e5/93545_zYRKK.jpg", "tags": ["搞笑", "奇幻", "日常"], "synopsis": "头脑聪明且极度自恋的高中生可儿江西也，在放学后被神秘转校生千斗五十铃用滑膛枪强行押往老旧萧条的“甘城光辉游乐园”。在那里他得知，游乐园的演职人员其实是来自魔法国度的精灵，若在两周内无法达成累计二十五万游客的目标，游乐园就会被关闭，精灵们也将失去赖以生存的魔力。", "backupCover": "https://api.bgm.tv/v0/subjects/93545/image?type=large"}, {"id": 57, "title": "战斗员派遣中！", "displayTitle": "《战斗员派遣中！》", "year": 2021, "yearStr": "2021年", "jp": "戦闘員、派遣します！", "romaji": "Sentouin, Hakenshimasu!", "bgmId": "302190", "bgmCover": "https://lain.bgm.tv/pic/cover/l/99/dc/302190_1NJ2Z.jpg", "tags": ["异世界", "搞笑", "奇幻", "科幻"], "synopsis": "秘密结社“如月”即将完成征服地球的伟业，为提前解决裁员危机并开拓新据点，高层将资深基层员工“战斗员六号”与毒舌美少女机器人艾莉丝传送到了外星球的异世界。六号必须通过做坏事积攒“恶行点数”来兑换地球现代科技武器，带着贪财圣职者、奇美拉和废柴女骑士在异世界胡作非为。", "backupCover": "https://api.bgm.tv/v0/subjects/302190/image?type=large"}, {"id": 58, "title": "学园默示录", "displayTitle": "《学园默示录》", "year": 2010, "yearStr": "2010年", "jp": "学園黙示録 HIGHSCHOOL OF THE DEAD", "romaji": "Highschool of the Dead", "bgmId": "5647", "bgmCover": "https://lain.bgm.tv/pic/cover/l/06/56/5647_E0U53.jpg", "tags": ["热血", "悬疑"], "synopsis": "原本平静祥和的藤美学园，在一个普通的午后被突如其来的丧尸病毒打破。一名闯入校门的感染者咬伤教师，短短数小时内整座校园便沦为人间炼狱。高二男生小室孝与青梅竹马宫本丽、剑道部主将毒岛冴子、军事宅平野户田、天才少女高城沙耶及校医鞠川静香组队突围，在末日崩坏的都市中浴血求生。", "backupCover": "https://api.bgm.tv/v0/subjects/5647/image?type=large"}, {"id": 59, "title": "青春猪头少年不会梦到兔女郎学姐", "displayTitle": "《青春猪头少年不会梦到兔女郎学姐》", "year": 2018, "yearStr": "2018年", "jp": "青春ブタ野郎はバニーガール先輩の夢を見ない", "romaji": "Seishun Buta Yarou wa Bunny Girl Senpai no Yume wo Minai", "bgmId": "240038", "bgmCover": "https://lain.bgm.tv/pic/cover/l/b9/45/240038_b5j7g.jpg", "tags": ["恋爱", "青春", "奇幻"], "synopsis": "高二男生梓川咲太在图书馆偶遇了身穿兔女郎服装的野生学姐——暂停演艺活动的知名演员樱岛麻衣，且周围所有人竟都完全看不见她的存在。为了解开这起因青春期心理不安引发的超自然传闻“青春期综合征”，阻止麻衣被全世界遗忘，咲太奔走于镰仓海滨，直面少女们内心的伤痛。", "backupCover": "https://api.bgm.tv/v0/subjects/240038/image?type=large"}, {"id": 60, "title": "当不成勇者的我，只好认真找工作了。", "displayTitle": "《当不成勇者的我，只好认真找工作了。》", "year": 2013, "yearStr": "2013年", "jp": "勇者になれなかった俺はしぶしぶ就職を決意しました。", "romaji": "Yuusha ni Narenakatta Ore wa Shibushibu Shuushoku wo Ketsui Shimashita.", "bgmId": "37935", "bgmCover": "https://lain.bgm.tv/pic/cover/l/6e/f0/37935_21ET6.jpg", "tags": ["搞笑", "奇幻", "恋爱", "日常"], "synopsis": "从小苦练剑术与魔法、立志成为勇者的青年劳尔，在勇者考试前夕却收到魔王已被讨伐、勇者制度正式废止的噩耗。失去人生目标的劳尔几经周折，在王都一家小型魔法家电专卖店“莱昂王都店”打工谋生。某天，店里来了一位名叫菲诺的开朗新人打工妹，而她的真实身份竟是前魔王的亲生女儿。", "backupCover": "https://api.bgm.tv/v0/subjects/37935/image?type=large"}, {"id": 61, "title": "在盛夏等待", "displayTitle": "《在盛夏等待》", "year": 2012, "yearStr": "2012年", "jp": "あの夏で待ってる", "romaji": "Ano Natsu de Matteru", "bgmId": "22657", "bgmCover": "https://lain.bgm.tv/pic/cover/l/6f/ad/22657_P0ZpP.jpg", "tags": ["恋爱", "青春", "科幻", "日常"], "synopsis": "喜欢拿着老式8毫米摄影机拍摄风景的高一男生雾岛海人，在一次夜拍时遭遇神秘爆炸并身受重伤。隔天醒来他竟毫发无损，同时班上转来了一位红发碧眼的归国美少女学姐贵月一花。因无处落脚而借住在海人家中的一花，与海人及朋友们决定在暑假合作拍摄一部独立电影，留下一段难忘的盛夏记忆。", "backupCover": "https://api.bgm.tv/v0/subjects/22657/image?type=large"}, {"id": 62, "title": "在无神世界进行信仰传播活动", "displayTitle": "《在无神世界进行信仰传播活动》", "year": 2023, "yearStr": "2023年", "jp": "神無き世界のカミサマ活動", "romaji": "Kaminaki Sekai no Kamisama Katsudou", "bgmId": "377607", "bgmCover": "https://api.bgm.tv/v0/subjects/377607/image?type=large", "tags": ["异世界", "搞笑", "奇幻", "智斗"], "synopsis": "身为可疑教团教祖之子的少年卜部征人，被迫参加严酷荒唐的继承仪式而意外丧命，转生到了一个根本不存在“神”与“宗教”概念的异世界。当征人陷入生死绝境下意识向自家神明“御灵”祈祷时，这位萝莉神明竟真的跨界降临，但因这个世界没有信徒而毫无神力。为恢复神力，两人开启了异世界传教大业。", "backupCover": "https://api.bgm.tv/v0/subjects/377607/image?type=large"}, {"id": 63, "title": "记录的地平线", "displayTitle": "《记录的地平线》", "year": 2013, "yearStr": "2013年", "jp": "ログ・ホライズン", "romaji": "Log Horizon", "bgmId": "64140", "bgmCover": "https://lain.bgm.tv/pic/cover/l/82/3d/64140_t3Qq3.jpg", "tags": ["异世界", "奇幻", "智斗"], "synopsis": "老牌网络游戏《幻境神话》迎来第十二次资料片更新当天，三万名日本玩家突然被卷入与游戏如出一辙的异世界。面对失去登出按钮、连NPC“大地人”都拥有真实情感的未知环境，秋叶原陷入混乱与绝望。曾是传说级团队参谋的“腹黑眼镜”城惠挺身而出，创立圆桌会议，用智慧重塑异世界社会秩序。", "backupCover": "https://api.bgm.tv/v0/subjects/64140/image?type=large"}, {"id": 64, "title": "金钱掌控", "displayTitle": "《金钱掌控》", "year": 2011, "yearStr": "2011年", "jp": "C 「THE MONEY OF SOUL AND POSSIBILITY CONTROL」", "romaji": "C: The Money of Soul and Possibility Control", "bgmId": "10844", "bgmCover": "https://lain.bgm.tv/pic/cover/l/96/97/10844_6BapN.jpg", "tags": ["奇幻", "智斗", "悬疑", "热血"], "synopsis": "大二学生余贺公麿最大的梦想只是成为公务员，拥有稳定的普通家庭生活。某天，来自“米达斯银行”的神秘男子真坂木出现在他面前，以他的“未来可能性”作为抵押借给他巨额资金，并将他引入与现实经济紧密相连的异空间“金融街”。在每周一次赌上未来的资产对战（Deal）中，公麿与搭档真朱并肩作战。", "backupCover": "https://api.bgm.tv/v0/subjects/10844/image?type=large"}, {"id": 65, "title": "怪兽8号", "displayTitle": "《怪兽8号》", "year": 2024, "yearStr": "2024年", "jp": "怪獣8号", "romaji": "Kaiju No. 8", "bgmId": "394623", "bgmCover": "https://lain.bgm.tv/pic/cover/l/9c/d2/394623_qErlO.jpg", "tags": ["热血", "科幻", "搞笑"], "synopsis": "在怪兽灾害频发的日本，32岁的日比野卡夫卡曾与青梅竹马亚白米娜立下“一起消灭所有怪兽”的誓言。然而米娜成为了防卫队耀眼的第3部队队长，多次落榜的卡夫卡却只能在怪兽尸体清理公司工作。在后辈市川莱诺的激励下他决定再次报考，却意外被神秘小型怪兽钻入体内，获得了变身为强悍怪兽的力量。", "backupCover": "https://api.bgm.tv/v0/subjects/394623/image?type=large"}, {"id": 66, "title": "至高指令", "displayTitle": "《至高指令》", "year": 2016, "yearStr": "2016年", "jp": "ビッグオーダー", "romaji": "Big Order", "bgmId": "36615", "bgmCover": "https://lain.bgm.tv/pic/cover/l/6e/32/36615_Ozchw.jpg", "tags": ["奇幻", "热血", "智斗"], "synopsis": "十年前，年幼的星宫映司向神秘妖精许下“毁灭世界”的愿望，引发了波及全球的大崩坏。十年后，世界各地涌现出能将愿望转化为超能力的“Order（能力者）”。背负罪恶感、一直隐瞒自己拥有“支配领土与万物”最强能力的映司，为了拯救重病的妹妹濑奈，不得不与转校生红铃联手踏上征服世界的道路。", "backupCover": "https://api.bgm.tv/v0/subjects/36615/image?type=large"}, {"id": 67, "title": "恋爱无法用双子除尽", "displayTitle": "《恋爱无法用双子除尽》", "year": 2024, "yearStr": "2024年", "jp": "恋は双子で割り切れない", "romaji": "Koi wa Futago de Warikirenai", "bgmId": "445722", "bgmCover": "https://lain.bgm.tv/pic/cover/l/88/cd/445722_8A9Gy.jpg", "tags": ["恋爱", "青春", "日常"], "synopsis": "高一男生白崎纯与住隔壁的神宫寺家双胞胎姐妹——运动万能、爽朗直率的姐姐琉实，以及外表文静、内里却是重度阿宅且言语犀利的妹妹那织，自幼便是如同家人般的青梅竹马。某天，琉实突然向纯提出试着交往的请求，然而这段恋情的开始与转折，却彻底打破了三人原本微妙平衡的青梅竹马关系。", "backupCover": "https://api.bgm.tv/v0/subjects/445722/image?type=large"}, {"id": 68, "title": "义妹生活", "displayTitle": "《义妹生活》", "year": 2024, "yearStr": "2024年", "jp": "義妹生活", "romaji": "Gimai Seikatsu", "bgmId": "393037", "bgmCover": "https://lain.bgm.tv/pic/cover/l/40/01/393037_I7mvN.jpg", "tags": ["恋爱", "青春", "日常"], "synopsis": "高中生浅村太一因父亲再婚，突然多出了一位同龄的义妹——同年级里因冷淡孤僻而被称为辣妹的绫濑沙季。由于两人都曾经历过原生家庭父母离异的伤痛，对男女关系与家庭抱有相似的审慎态度，因此约定互不越界、保持适当的距离感。然而在日复一日的平淡相处与相互理解中，微妙的情感悄然滋生。", "backupCover": "https://api.bgm.tv/v0/subjects/393037/image?type=large"}, {"id": 69, "title": "白色相簿2", "displayTitle": "《白色相簿2》", "year": 2013, "yearStr": "2013年", "jp": "WHITE ALBUM2", "romaji": "White Album 2", "bgmId": "69496", "bgmCover": "https://lain.bgm.tv/pic/cover/l/01/35/69496_xMBm7.jpg", "tags": ["恋爱", "青春"], "synopsis": "高三秋日，峰城大附属学园的轻音乐同好会因成员矛盾濒临解散。苦练吉他的最后一名部员北原春希，为了在高中最后的学园祭上登台演出，成功邀请了在天台清唱的学园偶像小木曾雪菜，以及在隔壁音乐教室弹奏钢琴的孤高少女冬马和纱入部。伴随着《白色相簿》的旋律，三人的命运与恋情深深纠缠。", "backupCover": "https://api.bgm.tv/v0/subjects/69496/image?type=large"}, {"id": 70, "title": "惊爆游戏", "displayTitle": "《惊爆游戏》", "year": 2012, "yearStr": "2012年", "jp": "BTOOOM!", "romaji": "Btooom!", "bgmId": "41529", "bgmCover": "https://lain.bgm.tv/pic/cover/l/fe/ee/41529_LK7kY.jpg", "tags": ["悬疑", "智斗", "热血", "科幻"], "synopsis": "22岁的无业青年坂本龙太在现实生活中碌碌无为，却在风靡全球的联机对战动作游戏《BTOOOM!》中是世界排名前列的顶尖高手。某天他醒来时，发现自己被扔到了一座荒无人烟的热带孤岛上，手背被植入芯片，背包里装着货真价实的BIM炸弹。他必须与女高中生卑弥呼等人合作，在真人炸弹大逃杀中活下去。", "backupCover": "https://api.bgm.tv/v0/subjects/41529/image?type=large"}, {"id": 71, "title": "缘结甘神家", "displayTitle": "《缘结甘神家》", "year": 2024, "yearStr": "2024年", "jp": "甘神さんちの縁結び", "romaji": "Amagami-san Chi no Enmusubi", "bgmId": "431370", "bgmCover": "https://lain.bgm.tv/pic/cover/l/7b/b8/431370_H6j06.jpg", "tags": ["恋爱", "青春", "奇幻", "日常"], "synopsis": "自幼在育幼院长大、立志考入京都大学医学部的高中生上终瓜生，被京都历史悠久的“甘神神社”宫司收留寄宿。原以为能安心备考的他，却被告知寄宿的条件是必须入赘并与神社的三位巫女孙女——温柔的夜重、傲娇的夕奈、古灵精怪的朝姬中的一人结婚，共同肩负起振兴神社的奇妙重任。", "backupCover": "https://api.bgm.tv/v0/subjects/431370/image?type=large"}, {"id": 72, "title": "写真女友", "displayTitle": "《写真女友》", "year": 2013, "yearStr": "2013年", "jp": "フォトカノ", "romaji": "Photokano", "bgmId": "55032", "bgmCover": "https://lain.bgm.tv/pic/cover/l/d8/14/55032_0lQlu.jpg", "tags": ["恋爱", "青春", "日常"], "synopsis": "高二暑假结束前夕，过着平淡生活的前田一也从父亲手中得到了一台单反数码相机。原本对摄影毫无头绪的他，被相机厚重的质感与快门声所吸引，决定在新学期带着相机去学校记录日常。透过取景框捕捉少女们耀眼瞬间的过程中，一也与青梅竹马新见遥佳及校园里的少女们展开了动人的恋爱故事。", "backupCover": "https://api.bgm.tv/v0/subjects/55032/image?type=large"}, {"id": 73, "title": "女友成双", "displayTitle": "《女友成双》", "year": 2021, "yearStr": "2021年", "jp": "カノジョも彼女", "romaji": "Kanojo mo Kanojo", "bgmId": "319513", "bgmCover": "https://api.bgm.tv/v0/subjects/319513/image?type=large", "tags": ["恋爱", "搞笑", "青春", "日常"], "synopsis": "性格耿直过头的高一男生向井直也，在经历了无数次表白后，终于与心心念念的青梅竹马佐木咲正式成为恋人。然而就在他沉浸于幸福之中时，可爱认真的同校女生水濑渚突然向他深情告白。无法抗拒渚的心意又不愿背叛咲的直也，竟带着渚去向正牌女友下跪请求“劈腿许可”，开启了荒唐爆笑的同居生活。", "backupCover": "https://api.bgm.tv/v0/subjects/319513/image?type=large"}, {"id": 74, "title": "第一次的辣妹", "displayTitle": "《第一次的辣妹》", "year": 2017, "yearStr": "2017年", "jp": "はじめてのギャル", "romaji": "Hajimete no Gal", "bgmId": "198675", "bgmCover": "https://lain.bgm.tv/pic/cover/l/d8/c9/198675_3wQ9q.jpg", "tags": ["恋爱", "搞笑", "青春", "日常"], "synopsis": "渴望摆脱单身的高中生羽柴纯一，在损友们的怂恿与捉弄下，硬着头皮向同班看似最难接近的时尚辣妹八女由佳奈下跪表白。原本以为肯定会被当场羞辱拒绝的纯一，没想到由佳奈在看穿他的小心思后，竟半开玩笑地答应了交往！纯情处男与刀子嘴豆腐心的专情辣妹，就此展开甜蜜欢闹的恋爱日常。", "backupCover": "https://api.bgm.tv/v0/subjects/198675/image?type=large"}, {"id": 75, "title": "缘之空", "displayTitle": "《缘之空》", "year": 2010, "yearStr": "2010年", "jp": "ヨスガノソラ", "romaji": "Yosuga no Sora", "bgmId": "7157", "bgmCover": "https://lain.bgm.tv/pic/cover/l/6e/01/7157_hF46A.jpg", "tags": ["恋爱", "青春", "日常"], "synopsis": "因突如其来的交通事故而失去双亲的双胞胎兄妹春日野悠与春日野穹，离开都市搬到了祖父生前居住的乡下小镇奥木染，尝试仅靠兄妹两人重建新生活。在蝉鸣阵阵的夏日乡村里，悠重逢了儿时玩伴依媛奈绪，并结识了天女目瑛、渚一叶等人，而在平行世界线的尽头，他与体弱依赖自己的妹妹穹直面禁忌的羁绊。", "backupCover": "https://api.bgm.tv/v0/subjects/7157/image?type=large"}, {"id": 76, "title": "喜欢本大爷的竟然就你一个？", "displayTitle": "《喜欢本大爷的竟然就你一个？》", "year": 2019, "yearStr": "2019年", "jp": "俺を好きなのはお前だけかよ", "romaji": "Ore wo Suki nano wa Omae dake ka yo", "bgmId": "262943", "bgmCover": "https://lain.bgm.tv/pic/cover/l/22/d7/262943_Kk8nT.jpg", "tags": ["恋爱", "搞笑", "青春"], "synopsis": "平时在学校伪装成老好人角色的高中生如月雨露（浇花壶），在周末先后被漂亮的学生会长秋野樱（波斯菊）与青梅竹马日向葵（向日葵）约出去。满心以为桃花运降临的他，在经典的公园长椅上听到的却是两人“我喜欢你的挚友太阳，请帮我追他”的委托。而真正暗恋雨露的，竟是他最畏惧的麻花辫眼镜娘三色院堇子。", "backupCover": "https://api.bgm.tv/v0/subjects/262943/image?type=large"}, {"id": 77, "title": "半田君传说", "displayTitle": "《半田君传说》", "year": 2016, "yearStr": "2016年", "jp": "はんだくん", "romaji": "Handa-kun", "bgmId": "167980", "bgmCover": "https://lain.bgm.tv/pic/cover/l/a0/1e/167980_lpltp.jpg", "tags": ["搞笑", "青春", "日常"], "synopsis": "作为《元气囝仔》的前传，故事聚焦于高中时代的年轻书法家半田清。拥有冷峻外貌与天才书法实力的半田君，实际上在全校师生心目中是顶礼膜拜的孤高偶像；然而由于挚友川藤的一句谎言，极度缺乏自信的半田君却深信自己遭到了全校同学的厌恶与霸凌，将所有崇拜之举全部脑补成恶意，闹出无数乌龙笑话。", "backupCover": "https://api.bgm.tv/v0/subjects/167980/image?type=large"}, {"id": 78, "title": "与班上第二可爱的女生成为朋友", "displayTitle": "《与班上第二可爱的女生成为朋友》", "year": 2026, "yearStr": "2026年", "jp": "クラスで2番目に可愛い女の子と友だちになった", "romaji": "Class de 2-banme ni Kawaii Onnanoko to Tomodachi ni Natta", "bgmId": "456079", "bgmCover": "https://lain.bgm.tv/pic/cover/l/13/2a/456079_4171E.jpg", "tags": ["恋爱", "青春", "日常"], "synopsis": "在班里毫无存在感、习惯独来独往的高中男生前原真树，每周五放学后都有一个不为人知的秘密约定——被总是跟在班花天海夕身边、被称为“班上第二可爱女生”的朝凪海溜进自己家里，一起吃垃圾食品、看B级电影、打游戏。卸下校园防备的两人，从周五限定的秘密挚友逐渐走向甜蜜的双向暗恋。", "backupCover": "https://api.bgm.tv/v0/subjects/456079/image?type=large"}, {"id": 79, "title": "遭到家族流放的转生重骑士靠着游戏知识无双", "displayTitle": "《遭到家族流放的转生重骑士靠着游戏知识无双》", "year": 2026, "yearStr": "2026年", "jp": "追放された転生重騎士はゲーム知識で無双する", "romaji": "Tsuihou sareta Tensei Juukishi wa Game Chishiki de Musou suru", "bgmId": "511177", "bgmCover": "https://lain.bgm.tv/pic/cover/l/8f/47/511177_EP43p.jpg", "tags": ["异世界", "奇幻", "热血"], "synopsis": "伯爵家嫡子艾尔玛在十五岁成人礼的加护仪式上，觉醒了被世人视为缺陷废职的“重骑士”职业，随即被贪婪的家人剥夺继承权并流放边境。然而在此刻觉醒前世记忆的艾尔玛深知，这个世界正是他生前钻研透彻的硬核游戏，而重骑士实则是后期凌驾于剑圣之上的最强职业。他凭借顶尖游戏理解开启无双冒险。", "backupCover": "https://api.bgm.tv/v0/subjects/511177/image?type=large"}, {"id": 80, "title": "我女友与青梅竹马的惨烈修罗场", "displayTitle": "《我女友与青梅竹马的惨烈修罗场》", "year": 2013, "yearStr": "2013年", "jp": "俺の彼女と幼なじみが修羅場すぎる", "romaji": "Ore no Kanojo to Osananajimi ga Shuraba Sugiru", "bgmId": "22458", "bgmCover": "https://lain.bgm.tv/pic/cover/l/2e/c1/22458_TPWEh.jpg", "tags": ["恋爱", "搞笑", "青春", "日常"], "synopsis": "因父母离异而发誓绝不谈恋爱、专心考取医学院拿到学费全免名额的高一男生季堂锐太，每天照顾着像妹妹一样的青梅竹马春咲千和。某天，反对恋爱至上主义的归国千金美少女夏川真凉，竟抓住了锐太初中时代的羞耻中二病笔记本，以此要挟他假扮情侣挡桃花，引发了现女友、青梅竹马、前世恋人之间的修罗场。", "backupCover": "https://api.bgm.tv/v0/subjects/22458/image?type=large"}, {"id": 81, "title": "变态王子与不笑猫", "displayTitle": "《变态王子与不笑猫》", "year": 2013, "yearStr": "2013年", "jp": "変態王子と笑わない猫。", "romaji": "Hentai Ouji to Warawanai Neko.", "bgmId": "45842", "bgmCover": "https://lain.bgm.tv/pic/cover/l/9c/1e/45842_ZF94F.jpg", "tags": ["恋爱", "搞笑", "奇幻", "青春"], "synopsis": "整日满脑子烦恼、被田径部伙伴戏称为“变态王子”的高中生横寺阳人，听说向山丘上的“不笑猫像”祈祷就能丢掉不需要的本音或表面功夫。他在猫像前偶遇了同样来许愿的少女筒隐月子，结果隔天醒来，阳人失去了说场面话的能力，任何心里话都会脱口而出；而月子则失去了所有表情，两人决定联手找回失去之物。", "backupCover": "https://api.bgm.tv/v0/subjects/45842/image?type=large"}, {"id": 82, "title": "风夏", "displayTitle": "《风夏》", "year": 2017, "yearStr": "2017年", "jp": "風夏", "romaji": "Fuuka", "bgmId": "188412", "bgmCover": "https://lain.bgm.tv/pic/cover/l/cf/26/188412_0g2sZ.jpg", "tags": ["恋爱", "青春", "热血"], "synopsis": "不擅长与人交流、整日盯着手机推特的高中男生榛名优，跟随姐妹搬到了东京生活。在街头偶遇时，他与从不使用手机、如清风般自由奔放的少女秋月风夏因误会相识，并发现两人竟是同班同学。与此同时，优与儿时约定组乐队的青梅竹马、如今已成为超人气偶像歌手的冰无小雪重逢，青春摇滚乐队物语就此奏响。", "backupCover": "https://api.bgm.tv/v0/subjects/188412/image?type=large"}, {"id": 83, "title": "怪物事变", "displayTitle": "《怪物事变》", "year": 2021, "yearStr": "2021年", "jp": "怪物事変", "romaji": "Kemono Jihen", "bgmId": "296941", "bgmCover": "https://lain.bgm.tv/pic/cover/l/6d/7c/296941_j4dd2.jpg", "tags": ["奇幻", "热血", "悬疑"], "synopsis": "在偏僻乡下旅馆被亲戚当成苦力、因身上泥臭而被称为“泥田坊”的十三岁少年日下夏羽，結识了从东京前来调查家畜离奇死亡事件的隐神侦探事务所所长隐神鼓八千。在危机中，夏羽得知自己是人类与尸鬼生下的半妖，并随隐神前往东京，与蜘蛛半妖织、雪男子晶等伙伴一边解决世界各地的怪物案件，一边寻找父母下落。", "backupCover": "https://api.bgm.tv/v0/subjects/296941/image?type=large"}, {"id": 84, "title": "不死者之王", "displayTitle": "《不死者之王》", "year": 2015, "yearStr": "2015年", "jp": "オーバーロード", "romaji": "Overlord", "bgmId": "112146", "bgmCover": "https://lain.bgm.tv/pic/cover/l/cd/a9/112146_qr9m3.jpg", "tags": ["异世界", "奇幻", "热血", "智斗"], "synopsis": "曾席卷一时的虚拟现实网络游戏《YGGDRASIL》迎来停服的最后一刻，深爱着公会据点“纳萨力克地下大坟墓”的公会长铃木悟，以不死族骷髅魔法师“飞鼠”的形象独自留守到午夜零点。然而服务器并未关闭，他连同整座大坟墓及拥有自我意识的强大守护者NPC们一同穿越到了异世界，遂改名安兹·乌尔·恭君临天下。", "backupCover": "https://api.bgm.tv/v0/subjects/112146/image?type=large"}, {"id": 85, "title": "格莱普尼尔", "displayTitle": "《格莱普尼尔》", "year": 2020, "yearStr": "2020年", "jp": "グレイプニル", "romaji": "Gleipnir", "bgmId": "276705", "bgmCover": "https://lain.bgm.tv/pic/cover/l/aa/57/276705_i8qRn.jpg", "tags": ["奇幻", "悬疑", "热血", "智斗"], "synopsis": "看似普通的高中生加贺谷修一，体内隐藏着能够变身为背部带有拉链、拥有超常怪力的布偶装怪物的神秘能力。某夜他在火灾现场救下了少女青木红爱，却因此暴露了秘密。正在搜寻外星硬币与失踪姐姐江丽奈下落的红爱，直接钻入修一变身后的布偶体内合二为一，迫使他卷入收集硬币能力者之间的残酷死斗。", "backupCover": "https://api.bgm.tv/v0/subjects/276705/image?type=large"}, {"id": 86, "title": "转生成为魔剑", "displayTitle": "《转生成为魔剑》", "year": 2022, "yearStr": "2022年", "jp": "転生したら剣でした", "romaji": "Tensei Shitara Ken Deshita", "bgmId": "350224", "bgmCover": "https://lain.bgm.tv/pic/cover/l/ee/ed/412008_vuyt4.jpg", "tags": ["异世界", "奇幻", "热血"], "synopsis": "遭遇车祸身亡的现代青年醒来时，发现自己既不是勇者也不是贵族，而是转生成了一把插在魔物平原祭坛上、拥有自我意识与吞噬魔石习得技能能力的智慧魔剑。在独自猎杀魔物积攒海量技能后，他救下了被奴隶商虐待的黑猫族少女芙兰。被称为“师父”的魔剑与立志进化的黑猫少女，就此展开爽快的异世界冒险。", "backupCover": "https://api.bgm.tv/v0/subjects/350224/image?type=large"}, {"id": 87, "title": "一拳超人", "displayTitle": "《一拳超人》", "year": 2015, "yearStr": "2015年", "jp": "ワンパンマン", "romaji": "One Punch Man", "bgmId": "127563", "bgmCover": "https://lain.bgm.tv/pic/cover/l/8c/a2/127563_nl66u.jpg", "tags": ["热血", "搞笑", "奇幻", "科幻"], "synopsis": "原本只是普通求职青年的埼玉，在一次从螃蟹怪人手中救下男孩的经历后，重拾儿时“成为英雄”的梦想。经过三年不间断的高强度锻炼，他虽然掉了所有头发，却获得了无论遇到多么凶恶强大的怪人都能一拳秒杀的无敌力量。为获得世人认可，他与改造人弟子杰诺斯一同加入英雄协会，对抗接踵而至的怪人危机。", "backupCover": "https://api.bgm.tv/v0/subjects/127563/image?type=large"}, {"id": 88, "title": "异世界迷宫里的后宫生活", "displayTitle": "《异世界迷宫里的后宫生活》", "year": 2022, "yearStr": "2022年", "jp": "異世界迷宮でハーレムを", "romaji": "Isekai Meikyuu de Harem wo", "bgmId": "322130", "bgmCover": "https://lain.bgm.tv/pic/cover/l/b3/a6/322130_g6hkc.jpg", "tags": ["异世界", "奇幻", "恋爱"], "synopsis": "对现实世界感到绝望的高中生加贺道夫，在神秘网站创建角色并分配点数时被传送到了剑与魔法的异世界。凭借初始设定面板附带的自由重置配点、鉴定与强力附魔外挂，他剿灭山贼赚取第一桶金，并在奴隶商人处买下了温柔忠诚的狼人族少女罗克珊，一边攻略地下迷宫致富，一边打造悠闲惬意的异世界生活。", "backupCover": "https://api.bgm.tv/v0/subjects/322130/image?type=large"}, {"id": 89, "title": "灵能百分百", "displayTitle": "《灵能百分百》", "year": 2016, "yearStr": "2016年", "jp": "モブサイコ100", "romaji": "Mob Psycho 100", "bgmId": "158316", "bgmCover": "https://lain.bgm.tv/pic/cover/l/2b/85/158316_gz1mM.jpg", "tags": ["热血", "奇幻", "青春", "搞笑"], "synopsis": "外貌平平、毫无存在感的初二男生影山茂夫（通称“路人”），天生拥有极其庞大的超能力，一旦情绪累积达到100%便会爆发惊人威力。然而他深知超能力无法带来普通人的幸福，于是一边在毫无灵能力却满嘴人生哲理的师父灵幻新隆的事务所打工除灵，一边加入肉体改造部锻炼体魄，在青春期的磨砺中实现心灵成长。", "backupCover": "https://api.bgm.tv/v0/subjects/158316/image?type=large"}, {"id": 90, "title": "庙不可言", "displayTitle": "《庙不可言》", "year": 2023, "yearStr": "2023年", "jp": "てんぷる", "romaji": "TenPuru", "bgmId": "416019", "bgmCover": "https://lain.bgm.tv/pic/cover/l/3e/ab/416019_aZaOE.jpg", "tags": ["恋爱", "搞笑", "日常"], "synopsis": "父亲是以风流好色闻名的赤神家家主，少年赤神明光从小立志断绝色欲、拒绝重蹈父亲覆辙。然而某天他在街头偶遇少女苍叶结月并一见钟情，为了斩断杂念，明光毅然削发前往偏远的三日月寺出家修行。岂料踏入山门才发现，这座寺庙竟是包括结月在内的美少女们聚居的尼姑庵，爆笑的寺庙合宿生活就此开启。", "backupCover": "https://api.bgm.tv/v0/subjects/416019/image?type=large"}, {"id": 91, "title": "寄宿学校的朱丽叶", "displayTitle": "《寄宿学校的朱丽叶》", "year": 2018, "yearStr": "2018年", "jp": "寄宿学校のジュリエット", "romaji": "Kishuku Gakkou no Juliet", "bgmId": "240346", "bgmCover": "https://lain.bgm.tv/pic/cover/l/5a/b7/240346_LDL3v.jpg", "tags": ["恋爱", "搞笑", "青春", "热血"], "synopsis": "坐落于中立岛屿的达利亚学园，聚集了来自敌对两国“东和国”与“威斯特公国”的寄宿学生，分为“黑犬寮”与“白猫寮”两大阵营日夜争斗。黑犬寮一年级领袖犬冢露壬雄，实际上一直暗恋着宿敌白猫寮的首领朱丽叶·佩尔西亚。在一次月下决斗中犬冢鼓起勇气表白成功，两人自此展开绝不能被发现的秘密地下恋情。", "backupCover": "https://api.bgm.tv/v0/subjects/240346/image?type=large"}, {"id": 92, "title": "碧蓝之海", "displayTitle": "《碧蓝之海》", "year": 2018, "yearStr": "2018年", "jp": "ぐらんぶる", "romaji": "Grand Blue", "bgmId": "118165", "bgmCover": "https://lain.bgm.tv/pic/cover/l/0f/2f/118165_f0m8c.jpg", "tags": ["搞笑", "青春", "日常"], "synopsis": "考入海滨城市伊豆大学的大一新生北原伊织，怀揣着对美好大学生活的憧憬，寄宿在叔父经营的潜水用品店“Grand Blue”。然而推开店门迎接他的，却是大学潜水社团“Peek a Boo”一群喜欢裸奔与狂饮“可燃乌龙茶”的疯狂学长，以及同龄的今村耕平与表姐妹古手川千纱、奈奈华，颜艺与欢笑齐飞的大学生活正式开幕。", "backupCover": "https://api.bgm.tv/v0/subjects/118165/image?type=large"}, {"id": 93, "title": "女神的露天咖啡厅", "displayTitle": "《女神的露天咖啡厅》", "year": 2023, "yearStr": "2023年", "jp": "女神のカフェテラス", "romaji": "Megami no Cafe Terrace", "bgmId": "398943", "bgmCover": "https://lain.bgm.tv/pic/cover/l/1c/e1/398943_fC8Lf.jpg", "tags": ["恋爱", "搞笑", "日常", "青春"], "synopsis": "考上东京大学的大一新生粕壁隼，收到相依为命却在三年前吵架分道扬镳的祖母去世的噩耗，时隔三年回到海边老家的咖啡厅“Familia”。他原打算将亏损的店铺拆掉改建停车场，推开门却发现店里住着五位自称是“奶奶家人”的年轻美少女员工。得知祖母遗愿的隼最终改变主意，与五位女神共同重振海滨咖啡厅。", "backupCover": "https://api.bgm.tv/v0/subjects/398943/image?type=large"}, {"id": 94, "title": "转生成蜘蛛又怎样！", "displayTitle": "《转生成蜘蛛又怎样！》", "year": 2021, "yearStr": "2021年", "jp": "蜘蛛ですが、なにか？", "romaji": "Kumo desu ga, Nani ka?", "bgmId": "252782", "bgmCover": "https://lain.bgm.tv/pic/cover/l/83/73/252782_aWyEn.jpg", "tags": ["异世界", "奇幻", "热血", "智斗"], "synopsis": "原本正在上古文课的高中全班师生，因一道跨越次元的神秘爆炸集体丧生并转生到异世界。当其他同学纷纷转生为王子、贵族与勇者候补时，在班级角落最不起眼的少女却转生成了凶险无比的“艾尔罗大迷宫”最底层的一只弱小蜘蛛魔物。凭着乐观话痨的心态与人类智慧，她靠吐丝设陷阱一步步进化求生。", "backupCover": "https://api.bgm.tv/v0/subjects/252782/image?type=large"}, {"id": 95, "title": "野生的大Boss出现了！", "displayTitle": "《野生的大Boss出现了！》", "year": 2025, "yearStr": "2025年", "jp": "野生のラスボスが現れた！", "romaji": "Yasei no Last Boss ga Arawareta!", "bgmId": "509355", "bgmCover": "https://lain.bgm.tv/pic/cover/l/7f/7f/509355_pL64P.jpg", "tags": ["异世界", "奇幻", "热血"], "synopsis": "在幻想MMORPG《Exgate Online》中，玩家操纵黑翼霸王“露法兹·玛法尔”统一世界后，为让游戏回归热闹而故意在剧情战役中落败退场。不料下一秒，玩家竟发现自己以露法兹本人的躯体降临到了真实的游戏世界，而距离当年那场大战已经过去了整整两百年。为寻回散落的十二星天部下并查明真相，霸王再度启程。", "backupCover": "https://api.bgm.tv/v0/subjects/509355/image?type=large"}, {"id": 96, "title": "契约之吻", "displayTitle": "《契约之吻》", "year": 2022, "yearStr": "2022年", "jp": "Engage Kiss", "romaji": "Engage Kiss", "bgmId": "375817", "bgmCover": "https://lain.bgm.tv/pic/cover/l/25/cd/375817_O7LGk.jpg", "tags": ["恋爱", "奇幻", "热血", "悬疑"], "synopsis": "因发掘出新能源而繁荣起来的人工岛“贝隆市”，暗地里频繁发生由恶魔引发的灾害。在岛上经营小型民营军事公司（PMC）、生活拮据的青年绪方修，依靠与深爱自己的粉发恶魔少女木更缔结契约——以亲吻吸取修的记忆为代价释放强大力量——来承接驱魔委托，同时与前女友夕桐绫乃共同追查当年的家庭惨案。", "backupCover": "https://api.bgm.tv/v0/subjects/375817/image?type=large"}, {"id": 97, "title": "绝园的暴风雨", "displayTitle": "《绝园的暴风雨》", "year": 2012, "yearStr": "2012年", "jp": "絶園のテンペスト", "romaji": "Zetsuen no Tempest", "bgmId": "39794", "bgmCover": "https://lain.bgm.tv/pic/cover/l/9d/8d/39794_NPpd7.jpg", "tags": ["奇幻", "悬疑", "智斗", "恋爱"], "synopsis": "高中生不破真广的妹妹不破爱花在一年前离奇遇害，真广为了找出真凶，与被族人放逐到孤岛上的最强魔法使公主锁部叶风达成交易。与此同时，真广的挚友、实则是爱花秘密恋人的泷川吉野也被卷入其中。围绕司掌起源的“初始之树”与毁灭的“绝园之树”，一场充满莎士比亚戏剧色彩的逻辑智斗与魔法奇幻剧全面展开。", "backupCover": "https://api.bgm.tv/v0/subjects/39794/image?type=large"}, {"id": 98, "title": "猪肝记得煮熟再吃", "displayTitle": "《猪肝记得煮熟再吃》", "year": 2023, "yearStr": "2023年", "jp": "豚のレバーは加熱しろ", "romaji": "Buta no Liver wa Kanetsu Shiro", "bgmId": "362005", "bgmCover": "https://lain.bgm.tv/pic/cover/l/cf/bf/362005_82znf.jpg", "tags": ["异世界", "奇幻", "恋爱"], "synopsis": "不起眼的阿宅大学生因生吃猪肝昏迷，醒来时发现自己竟转生到了异世界的猪圈里，变成了一只待宰的小猪！拯救了倒在泥泞中的他的，是能够读取人心的金发美少女女仆洁丝。尽管洁丝能一字不落地听见猪脑海里的各种妄想，却依然温柔相待。在得知耶斯玛一族背负的残酷宿命后，小猪拼尽全力也要带少女逃出生天。", "backupCover": "https://api.bgm.tv/v0/subjects/362005/image?type=large"}, {"id": 99, "title": "电锯人", "displayTitle": "《电锯人》", "year": 2022, "yearStr": "2022年", "jp": "チェンソーマン", "romaji": "Chainsaw Man", "bgmId": "321885", "bgmCover": "https://lain.bgm.tv/pic/cover/l/26/b4/321885_92uzU.jpg", "tags": ["热血", "奇幻", "悬疑"], "synopsis": "在恶魔横行的世界里，少年电次为了偿还亡父留下的巨额黑帮债务，与电锯恶魔波奇塔相依为命，靠猎杀恶魔和变卖器官勉强维生。某夜遭黑帮背叛并被丧尸恶魔残忍杀害后，波奇塔化作电次的心脏令其复活，使他获得了拉动胸口引擎拉环即可变身为“电锯人”的力量。随后他被公安对魔特异4课长官玛奇玛收留，展开狂野厮杀。", "backupCover": "https://api.bgm.tv/v0/subjects/321885/image?type=large"}, {"id": 100, "title": "异世界魔王与召唤少女的奴隶魔术", "displayTitle": "《异世界魔王与召唤少女的奴隶魔术》", "year": 2018, "yearStr": "2018年", "jp": "異世界魔王と召喚少女の奴隶魔術", "romaji": "Isekai Maou to Shoukan Shoujo no Dorei Majutsu", "bgmId": "236224", "bgmCover": "https://lain.bgm.tv/pic/cover/l/53/20/236224_OcW1t.jpg", "tags": ["异世界", "奇幻", "搞笑", "恋爱"], "synopsis": "在网络游戏《十字幻想曲》中凭借满级装备与高超操作被玩家敬畏地称为“魔王迪亚布罗”的家里蹲青年坂本拓真，某天醒来竟以游戏角色的姿态被召唤到了异世界。召唤他的豹人族少女蕾姆与精灵公主雪拉原本想对他施展主从奴隶魔术，却被他装备的固有指环“魔术反射”反弹。社恐的拓真只好继续扮演威严魔王踏上旅途。", "backupCover": "https://api.bgm.tv/v0/subjects/236224/image?type=large"}, {"id": 101, "title": "下流梗不存在的灰暗世界", "displayTitle": "《下流梗不存在的灰暗世界》", "year": 2015, "yearStr": "2015年", "jp": "下ネタという概念が存在しない退屈な世界", "romaji": "Shimoneta to Iu Gainen ga Sonzai Shinai Taikutsu na Sekai", "bgmId": "115780", "bgmCover": "https://api.bgm.tv/v0/subjects/115780/image?type=large", "tags": ["搞笑", "青春", "日常"], "synopsis": "随着《公序良俗健全育成法》的强制推行，日本彻底取缔了一切与性相关的词汇与出版物，全体国民佩戴实时监控言行的PM终端。为了接近暗恋的纯洁学生会长安娜，奥间狸吉考入全国顶尖的道德模范名校时冈学园，却意外被到处散播限制级传单的神秘蒙面少女“雪原之青”发现真实身份——学园副会长华城绫女，并被强拉入组织“SOX”。", "backupCover": "https://api.bgm.tv/v0/subjects/115780/image?type=large"}, {"id": 102, "title": "未来日记", "displayTitle": "《未来日记》", "year": 2011, "yearStr": "2011年", "jp": "未来日記", "romaji": "Mirai Nikki", "bgmId": "16235", "bgmCover": "https://lain.bgm.tv/pic/cover/l/0a/3d/16235_5GJQH.jpg", "tags": ["悬疑", "智斗", "恋爱", "奇幻"], "synopsis": "内向孤僻、习惯把日常所见全部记录在手机里的初二男生天野雪辉，经常在幻想中与时空之神宙斯交谈。某天醒来，他发现手机里的日记竟自动显示出了未来数天即将发生的事件！原来宙斯并非幻想，他将雪辉等十二名持有不同“未来日记”的人卷入神之座继承人选拔战，而狂热迷恋雪辉的同班美少女我妻由乃发誓不惜一切保护他。", "backupCover": "https://api.bgm.tv/v0/subjects/16235/image?type=large"}, {"id": 103, "title": "可塑性记忆", "displayTitle": "《可塑性记忆》", "year": 2015, "yearStr": "2015年", "jp": "プラスティック・メモリーズ", "romaji": "Plastic Memories", "bgmId": "114685", "bgmCover": "https://lain.bgm.tv/pic/cover/l/1d/08/114685_Ege3l.jpg", "tags": ["科幻", "恋爱", "日常"], "synopsis": "在人工智能高度普及的近未来，SAI社研发出拥有人类情感与记忆的智能机器人“Giftia”，但每台Giftia的灵魂使用寿命仅有81920小时（约九年零四个月），一旦超期就会丧失记忆并暴走。18岁的新人职员水柿司进入专门负责回收寿命将尽机器人的“终端服务第一办公室”，与温柔笨拙的Giftia少女艾拉组成搭档，直面注定到来的离别。", "backupCover": "https://api.bgm.tv/v0/subjects/114685/image?type=large"}, {"id": 104, "title": "木头风纪委员和迷你裙JK的故事", "displayTitle": "《木头风纪委员和迷你裙JK的故事》", "year": 2026, "yearStr": "2026年", "jp": "ポンコツ風紀委員とスカート丈が不適切なJKの話", "romaji": "Ponkotsu Fuuki Iin to Skirt-take ga Futekisetsu na JK no Hanashi", "bgmId": "551123", "bgmCover": "https://lain.bgm.tv/pic/cover/l/68/ba/551123_IkXfk.jpg", "tags": ["恋爱", "青春", "搞笑", "日常"], "synopsis": "一本正经却总是掉链子的木头脑瓜风纪委员樱大门统吾，每天在校门口严抓校规，而他最大的头疼对象，便是总是把校服裙摆改短、外表看似轻浮辣妹的同班女生小日向诗。尽管两人每次见面都在围绕裙子长度斗嘴，但在课业辅导与校园日常的频繁交集中，笨拙真挚的青春恋情在不知不觉间悄然萌芽。", "backupCover": "https://api.bgm.tv/v0/subjects/551123/image?type=large"}, {"id": 105, "title": "清恋", "displayTitle": "《清恋》", "year": 2017, "yearStr": "2017年", "jp": "セイレン", "romaji": "Seiren", "bgmId": "195229", "bgmCover": "https://lain.bgm.tv/pic/cover/l/f8/38/195229_l5ydB.jpg", "tags": ["恋爱", "青春", "日常"], "synopsis": "作为《圣诞之吻》精神续作，故事舞台依然设在辉日东高中。高二男生嘉味田正一因面临升学志愿调查而对未来感到迷茫。在盛夏林间学校、秋日游戏对决与冬日校园时光里，采用平行单元剧的形式，分别描绘了他与喜欢捉弄人的常木耀、率真游戏宅宫前透、以及青梅竹马桃乃今日子三位少女修成正果的纯爱篇章。", "backupCover": "https://api.bgm.tv/v0/subjects/195229/image?type=large"}, {"id": 106, "title": "约定的梦幻岛", "displayTitle": "《约定的梦幻岛》", "year": 2019, "yearStr": "2019年", "jp": "約束のネバーランド", "romaji": "Yakusoku no Neverland", "bgmId": "243916", "bgmCover": "https://lain.bgm.tv/pic/cover/l/ff/49/243916_XXJsd.jpg", "tags": ["悬疑", "智斗", "奇幻"], "synopsis": "坐落于森林之中的“恩典农场孤儿院”里，38名孤儿在温柔的“妈妈”伊莎贝拉照料下过着幸福无忧的生活。然而在一个满月之夜，11岁的艾玛与诺曼为了给被领养离开的妹妹柯尼送去遗落的玩偶，无意间走到了严禁靠近的大门，骇然撞见了柯尼的尸体——原来这里根本不是孤儿院，而是专门为“鬼”培育高级人肉食粮的农场。", "backupCover": "https://api.bgm.tv/v0/subjects/243916/image?type=large"}, {"id": 107, "title": "摇曳庄的幽奈小姐", "displayTitle": "《摇曳庄的幽奈小姐》", "year": 2018, "yearStr": "2018年", "jp": "ゆらぎ荘の幽奈さん", "romaji": "Yuragi-sou no Yuuna-san", "bgmId": "228969", "bgmCover": "https://api.bgm.tv/v0/subjects/228969/image?type=large", "tags": ["恋爱", "搞笑", "奇幻", "日常"], "synopsis": "自幼体质极易招惹幽灵、并因此在机缘巧合下练就了一身能够直接用拳头揍飞恶灵的“肉体派灵能力者”高中生冬空凩，为了摆脱幽灵附身欠下的债务，住进了传说闹鬼而房租极低的老旧温泉旅馆“摇曳庄”。他在204号房遇到了因留有未了心愿而无法升天的善良地缚灵美少女汤之花幽奈，并与庄内一众奇人异士开启同居生活。", "backupCover": "https://api.bgm.tv/v0/subjects/228969/image?type=large"}, {"id": 108, "title": "恋爱暴君", "displayTitle": "《恋爱暴君》", "year": 2017, "yearStr": "2017年", "jp": "恋愛暴君", "romaji": "Renai Boukun", "bgmId": "159795", "bgmCover": "https://lain.bgm.tv/pic/cover/l/11/a1/159795_XVpNv.jpg", "tags": ["恋爱", "搞笑", "奇幻", "青春"], "synopsis": "只要在上面写下任意两个人的名字，那两人就会被强制亲吻并结为情侣的神奇笔记本“亲吻笔记（Kiss Note）”。某天，持有笔记的丘比特少女古莉找上了普通高中男生蓝野青司，声称自己不小心把青司的名字写进了笔记，若24小时内青司不与某人接吻，古莉就会死去，而青司则会一辈子打光棍，由此引发了失控的恋爱闹剧。", "backupCover": "https://api.bgm.tv/v0/subjects/159795/image?type=large"}, {"id": 109, "title": "绝命制裁X", "displayTitle": "《绝命制裁X》", "year": 2015, "yearStr": "2015年", "jp": "トリアージX", "romaji": "Triage X", "bgmId": "112305", "bgmCover": "https://lain.bgm.tv/pic/cover/l/19/ca/112305_7de9z.jpg", "tags": ["热血", "悬疑"], "synopsis": "表面上是医疗设备先进的望月综合医院，背地里其理事长望月正宗却创立了一个凌驾于法律之上的秘密暗杀组织“黑色标签（Black Label）”。他们的宗旨是将法律无法制裁、如同社会恶性肿瘤般的罪犯标记为“黑色”，并予以物理切除。17岁的高中生三神岚白日里是普通学生，夜晚则与搭档梨田织叶等人化作处刑人涤荡罪恶。", "backupCover": "https://api.bgm.tv/v0/subjects/112305/image?type=large"}, {"id": 110, "title": "无限扭蛋", "displayTitle": "《无限扭蛋》", "year": 2025, "yearStr": "2025年", "jp": "信じていた仲間達にダンジョン奥地で殺されかけたがギフト『無限ガチャ』でレベル9999の仲間達を手に入れて元パーティーメンバーと世界に復讐＆『ざまぁ！』します！", "romaji": "Backstabbed in a Backwater Dungeon", "bgmId": "524195", "bgmCover": "https://lain.bgm.tv/pic/cover/l/41/c3/524195_PHt85.jpg", "tags": ["奇幻", "热血", "智斗"], "synopsis": "在人类地位卑微、备受其他种族歧视的世界里，拥有“无限扭蛋”恩惠的人类少年莱特，被跨种族小队“种族集结”邀请入队。然而在世界最凶险迷宫“奈落”深处，昔日伙伴竟露出真面目试图将他灭口。坠入深渊最底层的莱特在魔力充沛之地发动无限扭蛋，召唤出等级9999的绝对忠诚部下们，三年后率领最强军团重返地表展开复仇。", "backupCover": "https://api.bgm.tv/v0/subjects/524195/image?type=large"}, {"id": 111, "title": "佐佐木与文鸟小哔", "displayTitle": "《佐佐木与文鸟小哔》", "year": 2024, "yearStr": "2024年", "jp": "佐々木とピーちゃん", "romaji": "Sasaki to Pii-chan", "bgmId": "393038", "bgmCover": "https://lain.bgm.tv/pic/cover/l/7a/54/393038_6qnY1.jpg", "tags": ["异世界", "奇幻", "日常", "智斗"], "synopsis": "年近四十、在东京贸易公司每天过着枯燥加班生活的社畜大叔佐佐木，为了排解寂寞在宠物店买下了一只圆润可爱的文鸟。怎料回到家后，这只取名为“小哔”的文鸟竟然开口说话，声称自己是来自异世界的转生大贤者，并赋予了佐佐木往返异世界与魔法的能力。大叔本想靠倒卖现代商品在异世界慢活，却在现实世界也卷入了异能力者与魔法少女的纷争。", "backupCover": "https://api.bgm.tv/v0/subjects/393038/image?type=large"}, {"id": 112, "title": "奇幻自卫队", "displayTitle": "《奇幻自卫队》", "year": 2015, "yearStr": "2015年", "jp": "ゲート 自衛隊 彼の地にて、斯く戦えり", "romaji": "Gate: Jieitai Kanochi nite, Kaku Tatakaeri", "bgmId": "120445", "bgmCover": "https://lain.bgm.tv/pic/cover/l/a0/d0/120445_8e63L.jpg", "tags": ["异世界", "奇幻", "热血"], "synopsis": "某年8月的东京银座街头，突然出现了一座通往异世界的巨大石门“GATE”，从中涌出的冷兵器军团与飞龙对市民展开袭击。当时正休假去买同人志的御宅族自卫官伊丹耀司，因在现场组织避难立下大功而晋升二等陆尉，并受命率领第三侦察队跨越石门深入“特区”，与精灵少女、天才魔导师及亚神萝莉结下羁绊。", "backupCover": "https://api.bgm.tv/v0/subjects/120445/image?type=large"}, {"id": 113, "title": "秒杀外挂太强了，异世界的家伙们根本就不是对手。", "displayTitle": "《秒杀外挂太强了，异世界的家伙们根本就不是对手。》", "year": 2024, "yearStr": "2024年", "jp": "即死チートが最強すぎて、異世界のやつらがまるで相手にならないんですが。", "romaji": "My Instant Death Ability Is So Overpowered", "bgmId": "409441", "bgmCover": "https://lain.bgm.tv/pic/cover/l/ef/c7/409441_wrBwz.jpg", "tags": ["异世界", "奇幻", "搞笑"], "synopsis": "修学旅行途中的一整车高中生，被自称“贤者”的女人强行召唤到异世界并赐予“恩惠”外挂。而在大巴后排睡大觉的高远夜雾与坛之浦知千佳，因没有系统恩惠又遭遇飞龙袭击，被其他同学当作诱饵无情抛弃。殊不知夜雾天生便拥有只要动念说声“去死”就能无视一切防御法则直接抹杀任何存在的终极即死能力，两人一路秒杀强敌寻找归途。", "backupCover": "https://api.bgm.tv/v0/subjects/409441/image?type=large"}, {"id": 114, "title": "夏洛特", "displayTitle": "《夏洛特》", "year": 2015, "yearStr": "2015年", "jp": "Charlotte", "romaji": "Charlotte", "bgmId": "120925", "bgmCover": "https://lain.bgm.tv/pic/cover/l/9b/d6/120925_Zp040.jpg", "tags": ["奇幻", "青春", "恋爱", "科幻"], "synopsis": "受长周期彗星“夏洛特”散落的尘埃影响，极少数青春期少年少女会觉醒不完全的特殊超能力。乙坂有宇利用自己“夺取他人身体五秒钟”的能力在考试中作弊，顺利考入名门高中并自鸣得意，却被星之海学园学生会长友利奈绪当场抓获。为了保护能力者免受科学家抓捕实验，有宇被迫转学加入学生会，踏上改变命运的救赎之路。", "backupCover": "https://api.bgm.tv/v0/subjects/120925/image?type=large"}, {"id": 115, "title": "月光下的异世界之旅", "displayTitle": "《月光下的异世界之旅》", "year": 2021, "yearStr": "2021年", "jp": "月が導く異世界道中", "romaji": "Tsuki ga Michibiku Isekai Douchuu", "bgmId": "317275", "bgmCover": "https://lain.bgm.tv/pic/cover/l/26/ea/317275_t23SU.jpg", "tags": ["异世界", "奇幻", "热血", "搞笑"], "synopsis": "因父母曾与异世界缔结契约，平凡的高中生深澄真被强行召唤到异世界成为勇者。然而掌管该世界的颜控女神竟嫌弃他长相普通，当场剥夺了他的勇者头衔，只给了他“能与人族以外生物沟通”的能力便将他扔到了世界尽头的荒野。在月读命的庇佑下拥有规格外魔力的真，收服上位龙巴与灾厄黑蜘蛛澪，在亚空间开辟出世外桃源。", "backupCover": "https://api.bgm.tv/v0/subjects/317275/image?type=large"}, {"id": 116, "title": "恋爱禁止的世界", "displayTitle": "《恋爱禁止的世界》", "year": 2017, "yearStr": "2017年", "jp": "恋と嘘", "romaji": "Koi to Uso", "bgmId": "209412", "bgmCover": "https://lain.bgm.tv/pic/cover/l/50/6d/209412_BBTsj.jpg", "tags": ["恋爱", "青春"], "synopsis": "在少子化对策《由佳莉法》统治的近未来日本，自由恋爱被视为违背科学的行为，所有少年少女在年满16岁零点都会收到政府基于基因与大数据匹配出的最佳伴侣“政府通知”。内向的高中生根岛由佳吏一直暗恋着同班女神高崎美咲，并在16岁生日前夜鼓起勇气向美咲表白且得知两情相悦，然而零点时分，他手机上收到的指定结婚对象却是真田莉莉奈。", "backupCover": "https://api.bgm.tv/v0/subjects/209412/image?type=large"}, {"id": 117, "title": "这个世界漏洞百出", "displayTitle": "《这个世界漏洞百出》", "year": 2024, "yearStr": "2024年", "jp": "この世界は不完全すぎる", "romaji": "Quality Assurance in Another World", "bgmId": "425890", "bgmCover": "https://lain.bgm.tv/pic/cover/l/97/5c/425890_4dXnI.jpg", "tags": ["异世界", "奇幻", "悬疑", "智斗"], "synopsis": "在边陲村庄遭受巨龙袭击的绝境中，少女妮可拉偶遇了自称属于秘密调查组织“王之探索者”的男人羽贺。然而羽贺并非什么英雄，他的真实身份是受雇于现实游戏公司、被困在尚未开发完成的VR游戏世界里无法登出的专业调试员（Debug测试员）。为了触发登出条件，他带着本该死于剧情杀的NPC少女妮可拉踏上了全地图找Bug之旅。", "backupCover": "https://api.bgm.tv/v0/subjects/425890/image?type=large"}, {"id": 118, "title": "血意少年", "displayTitle": "《血意少年》", "year": 2013, "yearStr": "2013年", "jp": "ブラッドラッド", "romaji": "Blood Lad", "bgmId": "48065", "bgmCover": "https://lain.bgm.tv/pic/cover/l/d1/2f/48065_cVo4d.jpg", "tags": ["奇幻", "搞笑", "热血", "恋爱"], "synopsis": "统治魔界东区的强悍吸血鬼头目斯塔兹，与刻板印象中优雅嗜血的贵族截然不同，他其实是个狂热痴迷日本漫画、游戏与手办的骨灰级阿宅。某天，人类女高中生柳冬实误闯魔界被送到他的地盘，斯塔兹见到活生生的日本人激动不已，不料冬实却在转眼间被食人植物吞噬化作幽灵。斯塔兹当即立下血誓，定要寻遍魔界将冬实复活回人类。", "backupCover": "https://api.bgm.tv/v0/subjects/48065/image?type=large"}, {"id": 119, "title": "异世界悠闲农家", "displayTitle": "《异世界悠闲农家》", "year": 2023, "yearStr": "2023年", "jp": "異世界のんびり農家", "romaji": "Isekai Nonbiri Nouka", "bgmId": "376137", "bgmCover": "https://lain.bgm.tv/pic/cover/l/09/1a/376137_OjCOB.jpg", "tags": ["异世界", "日常", "奇幻", "搞笑"], "synopsis": "生前长期卧病在床、在医院度过最后十年的青年街尾火乐，死后在神明的补偿下获得“健康的身体”与一把能随心变形的“万能农具”，转生到了魔兽横行的“死亡森林”深处。他凭借万能农具开荒种田、挖掘水井、建造房屋，先后收留了地狱狼、恶魔蜘蛛，并迎来了吸血鬼公主露、天使族蒂洁尔与高等精灵等众多居民，建立起热闹的大树村。", "backupCover": "https://api.bgm.tv/v0/subjects/376137/image?type=large"}, {"id": 120, "title": "慎重勇者", "displayTitle": "《慎重勇者》", "year": 2019, "yearStr": "2019年", "jp": "慎重勇者～この勇者が俺TUEEEくせに慎重すぎる～", "romaji": "Shinchou Yuusha", "bgmId": "266157", "bgmCover": "https://lain.bgm.tv/pic/cover/l/02/3c/266157_1FVwV.jpg", "tags": ["异世界", "搞笑", "奇幻", "热血"], "synopsis": "统一神界的新人治愈女神莉丝妲黛，抽中了拯救拯救难度高达S级的世界“盖亚布兰德”的艰巨任务。她在众多候补者中选中了能力数值高到离谱的日本青年龙宫院圣哉作为勇者。然而圣哉却是个慎重到病态的男人——不仅买铠甲要一次买三套备着，还没出门就先在神界健身房锻炼到满级，哪怕面对最弱的史莱姆也要连续轰炸到连灰都不剩。", "backupCover": "https://api.bgm.tv/v0/subjects/266157/image?type=large"}, {"id": 121, "title": "狩龙人拉格纳", "displayTitle": "《狩龙人拉格纳》", "year": 2023, "yearStr": "2023年", "jp": "ラグナクリムゾン", "romaji": "Ragna Crimson", "bgmId": "374648", "bgmCover": "https://lain.bgm.tv/pic/cover/l/12/9a/374648_GOxE2.jpg", "tags": ["奇幻", "热血"], "synopsis": "在龙族凌驾于人类之上、唯有依靠银器才能与之抗衡的世界里，毫无剑术天分的少年拉格纳为了守护年幼的天才狩龙少女蕾欧，一直作为搭档随侍左右。某天，他梦见了数十年后失去蕾欧与一切的未来自己，并从未来的自己手中继承了登峰造极的“银气斗法”与记忆。为彻底改写惨剧，拉格纳与曾是前代翼之龙王的叛逆者绯红联手展开弑龙死战。", "backupCover": "https://api.bgm.tv/v0/subjects/374648/image?type=large"}];
+
+    // Global State
+    const state = {
+      search: '',
+      yearRange: 'all',
+      genre: 'all',
+      sort: 'default',
+      activeModalId: null,
+      isAdmin: false,
+      douyinMode: false,
+      douyinPage: 1,
+      scrollTimer: null,
+      scrollPaused: false
+    };
+
+    const DOUYIN_PAGE_SIZE = 12;
+
+    // Image Error Fallback: tries backup Bangumi subject image API once, then hides img and shows dark placeholder + anime title
+    window.handleImageError = function(imgEl) {
+      if (!imgEl) return;
+      const backup = imgEl.getAttribute('data-backup');
+      if (backup && imgEl.getAttribute('src') !== backup && !imgEl.dataset.triedBackup) {
+        imgEl.dataset.triedBackup = '1';
+        imgEl.src = backup;
+        return;
+      }
+      imgEl.style.display = 'none';
+      const fallbackEl = imgEl.nextElementSibling;
+      if (fallbackEl) {
+        fallbackEl.classList.remove('hidden');
+        fallbackEl.classList.add('flex');
+      }
+    };
+
+    // Filter & Sort Logic (Search matches ONLY by anime title)
+    function getFilteredList() {
+      const q = state.search.trim().toLowerCase();
+      const filtered = ANIME_LIST.filter(item => {
+        if (q) {
+          const matchTitle = item.title.toLowerCase().includes(q) || item.displayTitle.toLowerCase().includes(q);
+          if (!matchTitle) return false;
+        }
+        if (state.yearRange !== 'all') {
+          const [minY, maxY] = state.yearRange.split('-').map(Number);
+          if (item.year < minY || item.year > maxY) return false;
+        }
+        if (state.genre !== 'all') {
+          if (!item.tags || !item.tags.includes(state.genre)) return false;
+        }
+        return true;
+      });
+
+      const sorted = [...filtered];
+      if (state.sort === 'year-desc') {
+        sorted.sort((a, b) => b.year - a.year || a.id - b.id);
+      } else if (state.sort === 'year-asc') {
+        sorted.sort((a, b) => a.year - b.year || a.id - b.id);
+      } else {
+        sorted.sort((a, b) => a.id - b.id);
+      }
+      return sorted;
+    }
+
+    // Create Card HTML:
+    // - 3-column grid compatible
+    // - No top-left rank badge
+    // - Poster image with loading="lazy" and onerror fallback (dark background + anime name)
+    // - Bottom caption with ONLY white title and yellow year, unified height
+    function createCardHtml(item) {
+      return `
+        <article data-card-id="${item.id}" class="poster-card group cursor-pointer h-full rounded-xl sm:rounded-2xl bg-slate-900/95 border border-slate-800/90 overflow-hidden flex flex-col justify-between">
+          <div class="relative w-full aspect-[3/4] bg-[#131b2e] overflow-hidden shrink-0">
+            <img
+              src="${item.bgmCover}"
+              data-backup="${item.backupCover}"
+              alt="${item.displayTitle}"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              draggable="false"
+              class="poster-img w-full h-full object-cover pointer-events-none"
+              onerror="window.handleImageError(this)"
+            />
+            <div class="hidden absolute inset-0 bg-[#131b2e] flex-col items-center justify-center p-3 text-center">
+              <div class="w-8 h-8 rounded-full bg-slate-800/90 border border-slate-700/80 flex items-center justify-center text-indigo-400 mb-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/>
+                </svg>
+              </div>
+              <span class="text-xs sm:text-sm font-bold text-slate-100 line-clamp-3 leading-snug">${item.displayTitle}</span>
+            </div>
+          </div>
+
+          <div class="p-2.5 sm:p-3.5 bg-slate-900 flex-1 flex flex-col justify-between border-t border-slate-800/80">
+            <div class="h-8 sm:h-10 flex items-center justify-center">
+              <h2 class="text-xs sm:text-sm font-bold text-white group-hover:text-indigo-300 transition-colors line-clamp-2 text-center leading-snug" title="${item.displayTitle}">
+                ${item.displayTitle}
+              </h2>
+            </div>
+            <div class="mt-1.5 pt-1.5 border-t border-slate-800/60 flex items-center justify-center">
+              <span class="text-[11px] sm:text-xs font-semibold text-amber-400">${item.yearStr}</span>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    // Render 3-Column Gallery
+    function renderGallery() {
+      if (state.isAdmin && state.douyinMode) {
+        renderDouyinCardView();
+        return;
+      }
+      const list = getFilteredList();
+      const container = document.getElementById('galleryContainer');
+      const emptyState = document.getElementById('emptyState');
+      const summaryBar = document.getElementById('filterSummaryBar');
+      const summaryText = document.getElementById('filterSummaryText');
+
+      const hasFilter = state.search.trim() !== '' || state.yearRange !== 'all' || state.genre !== 'all';
+      if (hasFilter) {
+        summaryBar.classList.remove('hidden');
+        summaryBar.classList.add('flex');
+        const parts = [];
+        if (state.yearRange !== 'all') parts.push(`年份: ${state.yearRange}`);
+        if (state.genre !== 'all') parts.push(`题材: ${state.genre}`);
+        if (state.search.trim()) parts.push(`番名: "${state.search.trim()}"`);
+        summaryText.textContent = `当前筛选 (${parts.join(' · ')}) — 共匹配 ${list.length} / 121 部动漫`;
+      } else {
+        summaryBar.classList.add('hidden');
+        summaryBar.classList.remove('flex');
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      container.innerHTML = `
+        <div class="grid grid-cols-3 gap-2.5 sm:gap-5 items-stretch">
+          ${list.map(createCardHtml).join('')}
+        </div>
+      `;
+    }
+
+    // Update Capsule Active Styles
+    function updateCapsuleUI() {
+      document.querySelectorAll('.year-pill').forEach(btn => {
+        const active = btn.getAttribute('data-year-range') === state.yearRange;
+        btn.className = active
+          ? 'year-pill px-3 py-1 rounded-full text-xs font-medium bg-indigo-600 text-white shadow-sm shrink-0 transition-all'
+          : 'year-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all';
+      });
+      document.querySelectorAll('.genre-pill').forEach(btn => {
+        const active = btn.getAttribute('data-genre') === state.genre;
+        btn.className = active
+          ? 'genre-pill px-3 py-1 rounded-full text-xs font-medium bg-indigo-600 text-white shadow-sm shrink-0 transition-all'
+          : 'genre-pill px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white shrink-0 transition-all';
+      });
+    }
+
+    // Modal Operations (CSS Smooth Fade-In)
+    function openModal(id) {
+      const item = ANIME_LIST.find(a => a.id === id);
+      if (!item) return;
+      state.activeModalId = id;
+
+      const posterImg = document.getElementById('modalPosterImg');
+      const posterFallback = document.getElementById('modalPosterFallback');
+      posterFallback.classList.add('hidden');
+      posterFallback.classList.remove('flex');
+      posterImg.style.display = 'block';
+      delete posterImg.dataset.triedBackup;
+      posterImg.setAttribute('data-backup', item.backupCover || '');
+      posterImg.src = item.bgmCover;
+      posterImg.alt = item.displayTitle;
+
+      document.getElementById('modalFallbackTitle').textContent = item.displayTitle;
+      document.getElementById('modalFallbackYear').textContent = item.yearStr;
+      document.getElementById('modalYearBadge').textContent = item.yearStr;
+
+      const tagGroup = document.getElementById('modalTagGroup');
+      tagGroup.innerHTML = (item.tags || []).map(t =>
+        `<span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700/80 text-xs">${t}</span>`
+      ).join('');
+
+      document.getElementById('modalCnTitle').textContent = item.displayTitle;
+      document.getElementById('modalJpTitle').textContent = `${item.jp} (${item.romaji})`;
+      document.getElementById('modalSynopsis').textContent = item.synopsis || '';
+
+      document.getElementById('modalBgmLink').href = item.bgmId
+        ? 'https://bangumi.tv/subject/' + item.bgmId
+        : 'https://bangumi.tv/subject_search/' + encodeURIComponent(item.jp) + '?cat=2';
+
+      const modal = document.getElementById('detailModal');
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal() {
+      state.activeModalId = null;
+      const modal = document.getElementById('detailModal');
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    // Hidden Admin Mode (?admin=true)
+    function initAdminIfAuthorized() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('admin') !== 'true') return;
+      state.isAdmin = true;
+
+      const actionMount = document.getElementById('adminActionMount');
+      const studioMount = document.getElementById('adminStudioMount');
+      actionMount.classList.remove('hidden');
+      actionMount.classList.add('flex');
+
+      const downloadOriginalBtn = document.getElementById('downloadOriginalPosterBtn');
+      if (downloadOriginalBtn) {
+        downloadOriginalBtn.classList.remove('hidden');
+        downloadOriginalBtn.classList.add('inline-flex');
+      }
+
+      actionMount.innerHTML = `
+        <button id="toggleDouyinStudioBtn" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white text-xs font-bold shadow-lg shadow-rose-600/30 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          抖音分享生成台
+        </button>
+        <button id="topBatchExportPngBtn" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          批量导出PNG
+        </button>
+      `;
+
+      studioMount.innerHTML = `
+        <section id="douyinStudioPanel" class="mb-6 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900/95 to-rose-950/30 border border-rose-500/30 p-4 sm:p-5 shadow-xl">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-800/80">
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 text-[11px] font-bold mb-1.5">
+                管理员后台 · 抖音分享生成台
+              </div>
+              <h2 class="text-base sm:text-lg font-extrabold text-white">抖音 9:16 竖屏图文卡 & 自动滚动视频录屏</h2>
+              <p class="text-xs text-slate-400 mt-0.5">
+                支持切换 9:16 竖屏图文分页模式（每页 12 部，共 11 页）并一键批量导出高清 PNG 图集，或开启竖屏匀速滚动录屏。
+              </p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 shrink-0">
+              <button id="modeNormalWallBtn" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-all">
+                返回三列网格
+              </button>
+              <button id="modeDouyinCardsBtn" class="px-3.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-lg shadow-rose-600/25 transition-all">
+                切换 9:16 图文卡片
+              </button>
+              <button id="modeDouyinScrollBtn" class="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/25 transition-all">
+                开启竖屏自动滚动录屏
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-slate-950/60 rounded-xl p-3.5 border border-slate-800/80 space-y-3 mt-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="text-xs font-bold text-slate-200">9:16 竖屏图文分页控制（每页 3列×4行 = 12部）</span>
+              <span id="douyinPageIndicator" class="px-2.5 py-0.5 rounded-md bg-rose-500/20 text-rose-300 text-xs font-bold">第 1 / 11 页</span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-1.5" id="douyinPagePills"></div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/70">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button id="douyinPrevPageBtn" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium">上一页</button>
+                <button id="douyinNextPageBtn" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium">下一页</button>
+                <button id="exportSingleCardPngBtn" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-all">
+                  导出当前页 PNG
+                </button>
+                <button id="exportAllCardsPngBtn" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition-all">
+                  批量导出PNG (全部11张)
+                </button>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-[11px] text-slate-400">录屏滚动速度:</span>
+                <select id="scrollSpeedSelect" class="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-200">
+                  <option value="1.2">慢速</option>
+                  <option value="2.2" selected>标准</option>
+                  <option value="3.8">快速</option>
+                </select>
+              </div>
+            </div>
+            <p id="exportStatusMsg" class="text-[11px] text-emerald-400 hidden"></p>
+          </div>
+        </section>
+      `;
+
+      renderDouyinPagePills();
+      setupAdminEvents();
+    }
+
+    function getDouyinTotalPages() {
+      const list = getFilteredList();
+      return Math.max(1, Math.ceil(list.length / DOUYIN_PAGE_SIZE));
+    }
+
+    function renderDouyinPagePills() {
+      if (!state.isAdmin) return;
+      const totalPages = getDouyinTotalPages();
+      if (state.douyinPage > totalPages) state.douyinPage = 1;
+      if (state.douyinPage < 1) state.douyinPage = 1;
+      const pillsEl = document.getElementById('douyinPagePills');
+      const indicatorEl = document.getElementById('douyinPageIndicator');
+      if (indicatorEl) {
+        indicatorEl.textContent = `第 ${state.douyinPage} / ${totalPages} 页`;
+      }
+      if (!pillsEl) return;
+      let html = '';
+      for (let p = 1; p <= totalPages; p++) {
+        const active = p === state.douyinPage && state.douyinMode;
+        html += `<button data-dy-page="${p}" class="px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${active ? 'bg-rose-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:text-white'}">P${p}</button>`;
+      }
+      pillsEl.innerHTML = html;
+    }
+
+    function renderDouyinCardView() {
+      const list = getFilteredList();
+      const totalPages = getDouyinTotalPages();
+      if (state.douyinPage > totalPages) state.douyinPage = 1;
+      if (state.douyinPage < 1) state.douyinPage = 1;
+      const container = document.getElementById('galleryContainer');
+      const startIdx = (state.douyinPage - 1) * DOUYIN_PAGE_SIZE;
+      const pageItems = list.slice(startIdx, startIdx + DOUYIN_PAGE_SIZE);
+
+      const cardsHtml = pageItems.map(item => `
+        <div data-card-id="${item.id}" class="cursor-pointer rounded-xl bg-slate-900/95 border border-slate-700/80 overflow-hidden flex flex-col justify-between shadow-md">
+          <div class="relative w-full aspect-[3/4] bg-[#131b2e] overflow-hidden">
+            <img
+              src="${item.bgmCover}"
+              data-backup="${item.backupCover}"
+              alt="${item.displayTitle}"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              draggable="false"
+              class="w-full h-full object-cover pointer-events-none"
+              onerror="window.handleImageError(this)"
+            />
+            <div class="hidden absolute inset-0 bg-[#131b2e] flex-col items-center justify-center p-1.5 text-center">
+              <span class="text-[10px] font-bold text-slate-200 line-clamp-2">${item.displayTitle}</span>
+            </div>
+          </div>
+          <div class="px-1.5 py-1 bg-slate-900 text-center">
+            <div class="text-[10px] font-bold text-white truncate leading-tight">${item.displayTitle}</div>
+            <div class="text-[9px] font-semibold text-amber-400 leading-tight mt-0.5">${item.yearStr}</div>
+          </div>
+        </div>
+      `).join('');
+
+      container.innerHTML = `
+        <div class="py-2">
+          <div id="douyinActiveCardFrame" class="douyin-frame-wrapper">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2 shrink-0">
+              <div>
+                <div class="text-[10px] font-bold text-rose-400 tracking-wider">个人严选 · 一集不落完整看完</div>
+                <div class="text-sm font-extrabold text-white">个人觉得不错的121部番 (${state.douyinPage}/${totalPages})</div>
+              </div>
+              <span class="px-2 py-0.5 rounded-md bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 text-[10px] font-bold">2008–2026</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 flex-1 content-start">
+              ${cardsHtml}
+            </div>
+            <div class="pt-2 mt-1 border-t border-slate-800/80 flex items-center justify-between text-[10px] text-slate-400 shrink-0">
+              <span>画风舒适 · 全部追完留存</span>
+              <span class="text-amber-300 font-semibold">评论区聊聊你看过几部？</span>
+            </div>
+          </div>
+        </div>
+      `;
+      renderDouyinPagePills();
+    }
+
+    // Generate 1080x1920 PNG Blob via Canvas without any hardcoded Base64
+    async function generateDouyinPageBlob(pageNum) {
+      const list = getFilteredList();
+      const totalPages = getDouyinTotalPages();
+      const startIdx = (pageNum - 1) * DOUYIN_PAGE_SIZE;
+      const pageItems = list.slice(startIdx, startIdx + DOUYIN_PAGE_SIZE);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 1080;
+      canvas.height = 1920;
+      const ctx = canvas.getContext('2d');
+
+      const bgGrad = ctx.createLinearGradient(0, 0, 1080, 1920);
+      bgGrad.addColorStop(0, '#0f172a');
+      bgGrad.addColorStop(0.55, '#090d16');
+      bgGrad.addColorStop(1, '#15112c');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, 1080, 1920);
+
+      ctx.fillStyle = '#fb7185';
+      ctx.font = 'bold 24px sans-serif';
+      ctx.fillText('个人严选 · 画风舒适 · 一集不落完整看完', 48, 62);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 40px sans-serif';
+      ctx.fillText(`个人觉得不错的121部番 (${pageNum}/${totalPages})`, 48, 114);
+
+      async function loadCleanImage(item) {
+        const candidates = [
+          'https://wsrv.nl/?url=' + encodeURIComponent(item.bgmCover) + '&w=400&output=jpg',
+          item.bgmCover,
+          item.backupCover
+        ];
+        for (const u of candidates) {
+          if (!u) continue;
+          try {
+            const img = await new Promise((resolve, reject) => {
+              const im = new Image();
+              im.crossOrigin = 'anonymous';
+              im.onload = () => resolve(im);
+              im.onerror = reject;
+              im.src = u;
+            });
+            return img;
+          } catch (e) {}
+        }
+        return null;
+      }
+
+      const cols = 3;
+      const padX = 48;
+      const gapX = 27;
+      const gapY = 24;
+      const cardW = Math.floor((1080 - padX * 2 - gapX * (cols - 1)) / cols);
+      const imgH = Math.floor(cardW * 1.12);
+      const capH = 66;
+      const cardH = imgH + capH;
+      const startY = 145;
+
+      const loadedImgs = await Promise.all(pageItems.map(item => loadCleanImage(item)));
+
+      pageItems.forEach((item, idx) => {
+        const col = idx % cols;
+        const row = Math.floor(idx / cols);
+        const x = padX + col * (cardW + gapX);
+        const y = startY + row * (cardH + gapY);
+
+        ctx.fillStyle = '#131b2e';
+        ctx.fillRect(x, y, cardW, cardH);
+
+        const im = loadedImgs[idx];
+        if (im) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(x, y, cardW, imgH);
+          ctx.clip();
+          const scale = Math.max(cardW / im.width, imgH / im.height);
+          const sw = im.width * scale;
+          const sh = im.height * scale;
+          ctx.drawImage(im, x + (cardW - sw) / 2, y + (imgH - sh) / 2, sw, sh);
+          ctx.restore();
+        } else {
+          ctx.fillStyle = '#e2e8f0';
+          ctx.font = 'bold 20px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(item.displayTitle.slice(0, 10), x + cardW / 2, y + imgH / 2);
+          ctx.textAlign = 'left';
+        }
+
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(x, y + imgH, cardW, capH);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 19px sans-serif';
+        ctx.textAlign = 'center';
+        const shortTitle = item.displayTitle.length > 13 ? item.displayTitle.slice(0, 12) + '…》' : item.displayTitle;
+        ctx.fillText(shortTitle, x + cardW / 2, y + imgH + 28);
+
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = 'bold 17px sans-serif';
+        ctx.fillText(item.yearStr, x + cardW / 2, y + imgH + 54);
+        ctx.textAlign = 'left';
+
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.22)';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(x, y, cardW, cardH);
+      });
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = 'bold 22px sans-serif';
+      ctx.fillText('121 部个人精选动漫 · 2008–2026', 48, 1888);
+      ctx.fillStyle = '#fbbf24';
+      ctx.textAlign = 'right';
+      ctx.fillText('来看看你看过其中几部？', 1032, 1888);
+      ctx.textAlign = 'left';
+
+      return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    }
+
+    async function downloadSingleDouyinPng(pageNum) {
+      const msgEl = document.getElementById('exportStatusMsg');
+      if (msgEl) {
+        msgEl.classList.remove('hidden');
+        msgEl.textContent = `正在生成第 ${pageNum} 页 1080×1920 高清 PNG 海报...`;
+      }
+      try {
+        const blob = await generateDouyinPageBlob(pageNum);
+        const objUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = objUrl;
+        a.download = `抖音动漫片单_第${String(pageNum).padStart(2, '0')}页_9x16.png`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(objUrl), 5000);
+        if (msgEl) msgEl.textContent = `第 ${pageNum} 页高清 PNG 海报已导出！`;
+      } catch (e) {
+        if (msgEl) msgEl.textContent = '导出遇到跨域限制，建议直接使用系统截图保存。';
+      }
+    }
+
+    async function batchExportAllPng() {
+      const total = getDouyinTotalPages();
+      for (let p = 1; p <= total; p++) {
+        state.douyinPage = p;
+        if (state.douyinMode) renderDouyinCardView();
+        await downloadSingleDouyinPng(p);
+        await new Promise(r => setTimeout(r, 400));
+      }
+    }
+
+    function startDouyinAutoScroll() {
+      state.douyinMode = false;
+      renderGallery();
+      document.body.classList.add('douyin-scroll-recording');
+      const bar = document.getElementById('stopScrollBar');
+      bar.classList.remove('hidden');
+      bar.classList.add('inline-flex');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      state.scrollPaused = false;
+      document.getElementById('pauseResumeScrollBtn').textContent = '暂停';
+
+      if (state.scrollTimer) cancelAnimationFrame(state.scrollTimer);
+      function step() {
+        if (!document.body.classList.contains('douyin-scroll-recording')) return;
+        if (!state.scrollPaused) {
+          const speedEl = document.getElementById('scrollSpeedSelect');
+          const speed = parseFloat((speedEl && speedEl.value) || '2.2');
+          window.scrollBy(0, speed);
+          if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
+            state.scrollPaused = true;
+            document.getElementById('pauseResumeScrollBtn').textContent = '已到底部 (点击重播)';
+          }
+        }
+        state.scrollTimer = requestAnimationFrame(step);
+      }
+      state.scrollTimer = requestAnimationFrame(step);
+    }
+
+    function stopDouyinAutoScroll() {
+      if (state.scrollTimer) {
+        cancelAnimationFrame(state.scrollTimer);
+        state.scrollTimer = null;
+      }
+      document.body.classList.remove('douyin-scroll-recording');
+      const bar = document.getElementById('stopScrollBar');
+      bar.classList.add('hidden');
+      bar.classList.remove('inline-flex');
+    }
+
+    function setupAdminEvents() {
+      const studioPanel = document.getElementById('douyinStudioPanel');
+      document.getElementById('toggleDouyinStudioBtn').addEventListener('click', () => {
+        studioPanel.classList.toggle('hidden');
+        if (!studioPanel.classList.contains('hidden')) {
+          studioPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+
+      document.getElementById('topBatchExportPngBtn').addEventListener('click', () => {
+        studioPanel.classList.remove('hidden');
+        batchExportAllPng();
+      });
+
+      document.getElementById('modeNormalWallBtn').addEventListener('click', () => {
+        state.douyinMode = false;
+        stopDouyinAutoScroll();
+        renderGallery();
+        renderDouyinPagePills();
+      });
+
+      document.getElementById('modeDouyinCardsBtn').addEventListener('click', () => {
+        stopDouyinAutoScroll();
+        state.douyinMode = true;
+        renderDouyinCardView();
+      });
+
+      document.getElementById('modeDouyinScrollBtn').addEventListener('click', () => {
+        startDouyinAutoScroll();
+      });
+
+      document.getElementById('douyinPrevPageBtn').addEventListener('click', () => {
+        state.douyinMode = true;
+        const total = getDouyinTotalPages();
+        state.douyinPage = state.douyinPage > 1 ? state.douyinPage - 1 : total;
+        renderDouyinCardView();
+      });
+
+      document.getElementById('douyinNextPageBtn').addEventListener('click', () => {
+        state.douyinMode = true;
+        const total = getDouyinTotalPages();
+        state.douyinPage = state.douyinPage < total ? state.douyinPage + 1 : 1;
+        renderDouyinCardView();
+      });
+
+      document.getElementById('douyinPagePills').addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-dy-page]');
+        if (!btn) return;
+        state.douyinMode = true;
+        state.douyinPage = Number(btn.getAttribute('data-dy-page'));
+        renderDouyinCardView();
+      });
+
+      document.getElementById('exportSingleCardPngBtn').addEventListener('click', () => {
+        downloadSingleDouyinPng(state.douyinPage);
+      });
+
+      document.getElementById('exportAllCardsPngBtn').addEventListener('click', () => {
+        batchExportAllPng();
+      });
+
+      document.getElementById('pauseResumeScrollBtn').addEventListener('click', () => {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+          window.scrollTo({ top: 0, behavior: 'instant' });
+          state.scrollPaused = false;
+          document.getElementById('pauseResumeScrollBtn').textContent = '暂停';
+        } else {
+          state.scrollPaused = !state.scrollPaused;
+          document.getElementById('pauseResumeScrollBtn').textContent = state.scrollPaused ? '继续滚动' : '暂停';
+        }
+      });
+
+      document.getElementById('stopScrollBtn').addEventListener('click', () => {
+        stopDouyinAutoScroll();
+      });
+    }
+
+    let toastTimeoutId = null;
+    function showLightToast(message = '原图开始下载') {
+      const toastEl = document.getElementById('lightToast');
+      const toastTextEl = document.getElementById('lightToastText');
+      if (!toastEl || !toastTextEl) return;
+      toastTextEl.textContent = message;
+      toastEl.classList.remove('opacity-0', '-translate-y-2');
+      toastEl.classList.add('opacity-100', 'translate-y-0');
+      if (toastTimeoutId) clearTimeout(toastTimeoutId);
+      toastTimeoutId = setTimeout(() => {
+        toastEl.classList.remove('opacity-100', 'translate-y-0');
+        toastEl.classList.add('opacity-0', '-translate-y-2');
+      }, 2400);
+    }
+
+    // Download lossless original poster via img src + fetch Blob + <a download>
+    async function downloadCurrentOriginalPoster() {
+      if (!state.isAdmin) return;
+      const posterImg = document.getElementById('modalPosterImg');
+      if (!posterImg) return;
+
+      // Extract original external image URL directly from img tag's src attribute
+      const rawImgUrl = posterImg.getAttribute('src') || posterImg.src;
+      if (!rawImgUrl) return;
+
+      // Determine anime title for filename
+      const currentItem = ANIME_LIST.find(a => a.id === state.activeModalId);
+      const rawAnimeTitle = currentItem
+        ? currentItem.title
+        : (document.getElementById('modalCnTitle').textContent || '动漫海报').replace(/^《|》$/g, '').trim();
+      const safeFileName = rawAnimeTitle.replace(/[\\/:*?"<>|]/g, '_');
+
+      // Show lightweight toast prompt on page
+      showLightToast('原图开始下载');
+
+      try {
+        let blob = null;
+        try {
+          const response = await fetch(rawImgUrl, { referrerPolicy: 'no-referrer' });
+          if (!response.ok) throw new Error('Direct fetch failed with status ' + response.status);
+          blob = await response.blob();
+        } catch (corsErr) {
+          // Fallback only if external host blocks CORS: fetch untouched original resolution stream
+          const proxyResponse = await fetch('https://wsrv.nl/?url=' + encodeURIComponent(rawImgUrl));
+          if (!proxyResponse.ok) throw new Error('Fallback fetch failed');
+          blob = await proxyResponse.blob();
+        }
+
+        let ext = 'jpg';
+        if (blob && blob.type) {
+          if (blob.type.includes('png')) ext = 'png';
+          else if (blob.type.includes('webp')) ext = 'webp';
+          else if (blob.type.includes('gif')) ext = 'gif';
+          else if (blob.type.includes('jpeg') || blob.type.includes('jpg')) ext = 'jpg';
+        } else {
+          const urlMatch = rawImgUrl.split('?')[0].match(/\.(jpg|jpeg|png|webp|gif)$/i);
+          if (urlMatch) ext = urlMatch[1].toLowerCase();
+        }
+
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = blobUrl;
+        a.download = `${safeFileName}.${ext}`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+      } catch (err) {
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = rawImgUrl;
+        a.download = `${safeFileName}.jpg`;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
+    }
+
+    // Main Event Listeners & Basic Anti-Scraping
+    function setupEvents() {
+      // Card click delegation -> smooth fade-in detail modal
+      document.getElementById('galleryContainer').addEventListener('click', (e) => {
+        const card = e.target.closest('[data-card-id]');
+        if (card) {
+          const id = Number(card.getAttribute('data-card-id'));
+          openModal(id);
+        }
+      });
+
+      // Search input (fuzzy match by anime title only)
+      const searchInput = document.getElementById('searchInput');
+      const clearSearchBtn = document.getElementById('clearSearchBtn');
+      searchInput.addEventListener('input', (e) => {
+        state.search = e.target.value;
+        clearSearchBtn.classList.toggle('hidden', !state.search);
+        renderGallery();
+        renderDouyinPagePills();
+      });
+      clearSearchBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        state.search = '';
+        clearSearchBtn.classList.add('hidden');
+        renderGallery();
+        renderDouyinPagePills();
+      });
+
+      // Sort dropdown
+      document.getElementById('sortSelect').addEventListener('change', (e) => {
+        state.sort = e.target.value;
+        renderGallery();
+      });
+
+      // Capsule Row 1: Year Range
+      document.getElementById('yearCapsuleRow').addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-year-range]');
+        if (!btn) return;
+        state.yearRange = btn.getAttribute('data-year-range');
+        updateCapsuleUI();
+        renderGallery();
+        renderDouyinPagePills();
+      });
+
+      // Capsule Row 2: Genre
+      document.getElementById('genreCapsuleRow').addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-genre]');
+        if (!btn) return;
+        state.genre = btn.getAttribute('data-genre');
+        updateCapsuleUI();
+        renderGallery();
+        renderDouyinPagePills();
+      });
+
+      // Reset all filters
+      const resetAll = () => {
+        state.search = '';
+        state.yearRange = 'all';
+        state.genre = 'all';
+        searchInput.value = '';
+        clearSearchBtn.classList.add('hidden');
+        updateCapsuleUI();
+        renderGallery();
+        renderDouyinPagePills();
+      };
+      document.getElementById('resetAllFiltersBtn').addEventListener('click', resetAll);
+      document.getElementById('emptyResetBtn').addEventListener('click', resetAll);
+
+      // Modal close, original poster download (Admin only) & navigation
+      document.getElementById('downloadOriginalPosterBtn').addEventListener('click', downloadCurrentOriginalPoster);
+      document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+      document.getElementById('detailModal').addEventListener('click', (e) => {
+        if (e.target.id === 'detailModal') closeModal();
+      });
+
+      document.getElementById('prevAnimeBtn').addEventListener('click', () => {
+        if (!state.activeModalId) return;
+        const list = getFilteredList();
+        const idx = list.findIndex(a => a.id === state.activeModalId);
+        if (idx > 0) openModal(list[idx - 1].id);
+        else if (list.length > 0) openModal(list[list.length - 1].id);
+      });
+
+      document.getElementById('nextAnimeBtn').addEventListener('click', () => {
+        if (!state.activeModalId) return;
+        const list = getFilteredList();
+        const idx = list.findIndex(a => a.id === state.activeModalId);
+        if (idx >= 0 && idx < list.length - 1) openModal(list[idx + 1].id);
+        else if (list.length > 0) openModal(list[0].id);
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (!state.activeModalId) return;
+        if (e.key === 'Escape') closeModal();
+        if (e.key === 'ArrowLeft') document.getElementById('prevAnimeBtn').click();
+        if (e.key === 'ArrowRight') document.getElementById('nextAnimeBtn').click();
+      });
+
+      // Basic Anti-Scraping: Disable right-click (contextmenu) and image dragging only; allow normal text selection & input paste
+      document.addEventListener('contextmenu', (e) => e.preventDefault());
+      document.addEventListener('dragstart', (e) => {
+        if (e.target.tagName === 'IMG') {
+          e.preventDefault();
+        }
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initAdminIfAuthorized();
+      renderGallery();
+      setupEvents();
+    });
+  </script>
+</body>
+</html>
